@@ -1,57 +1,98 @@
-Node Image Scraper
-========================
-Scrape images from the web easily.
-Usage
-------------------------
-The image-scrape module provides a class which needs to be constructed with a url:
-```JavaScript
-var Scraper = require("image-scraper");
+# images-scraper
+This a simple way to scrape Google/Bing images using Nightmare and not be dependent on any API. The headless browser will just behave like a normal person, scroll and click. A rate limiter is implemented and can be used to prevent bans. Only the Google scraper uses a headless browser, the other providers use custom requests to generate the results.
 
-var scraper = new Scraper("http://apod.nasa.gov/apod/astropix.html");
-```
-The url can be changed easily:
-```JavaScript
-scraper.address = "http://www.npmjs.org";
-```
-The scraper object provides the .scrape() method.
-The scrape method accepts one optional argument: a callback function.
+# Installation
+```npm install images-scraper```
 
-This callback function can also be set using the .on() method.
+# Example Google
+Give me the first 10 images of Banana's from Google (using headless browser)
 
-```JavaScript
-scraper.on("image", function(image){
+```js
+var Scraper = require ('images-scraper')
+  , google = new Scraper.Google();
 
-	// Do something.	
+google.list({
+	keyword: 'banana',
+	num: 10,
+	detail: true,
+	nightmare: {
+		show: true
+	}
+})
+.then(function (res) {
+	console.log('first 10 results from google', res);
+}).catch(function(err) {
+	console.log('err', err);
+});
+
+// you can also watch on events
+google.on('result', function (item) {
+	console.log('out', item);
 });
 ```
-As soon as 'scraper.scrape()' is called, the callback will be fired with every image found on the webpage, note however that dynamically generated images will not be found.
 
-The image object that is passed to the callback has the following properties and methods:
-```JavaScript
-// The attributes found in the image tag, which is parsed by Cheerio (https://npmjs.org/package/cheerio).
-image.attributes;
-// The basename of the image.
-image.name;
-// Absolute path to the folder the image will be saved to.
-image.saveTo;
-// Extension of the image file.
-image.extension;
-// The absolute URL of the image.
-image.address;
-// The URL of the page the image is scraped from.
-image.fromAddress;
-// Save the image.
-image.save();
+# Example Bing (very fast)
+```js
+var Scraper = require ('images-scraper')
+  , bing = new Scraper.Bing();
+
+bing.list({
+	keyword: 'banana',
+	num: 10,
+	detail: true
+})
+.then(function (res) {
+	console.log('first 10 results from bing', res);
+}).catch(function(err) {
+	console.log('err',err);
+})
 ```
-The behaviour of image.save() can be changed by setting the name, saveTo, and extension properties.
-The saveTo property is by default set to the current directory, and the other two properties are by default set to the data found in the src attribute of the img tag.
 
-Thus, the smallest program that scans a webpage for images and saves them in the current directory looks as follows:
-```JavaScript
-var Scraper = require('image-scraper');
-var scraper = new Scraper('http://apod.nasa.gov/apod/astropix.html');
-
-scraper.scrape(function(image) { 
-	image.save();
+# Yahoo
+```js
+yahoo.list({
+	keyword: 'banana',
+	num: 10,
+}).then(function (res) {
+	console.log('results', res);
+}).catch(function (err) {
+	console.log('err',err);
 });
 ```
+
+# Picsearch
+```js
+pics.list({
+	keyword: 'banana',
+	num: 10,
+}).then(function (res) {
+	console.log('out',res);
+}).catch(function (err) {
+	console.log('err',err);
+});
+```
+
+# Options
+Options that can be passed to each scraper:
+
+```js
+var options = {
+	// general
+	keyword: 'keyword',		// required,
+	userAgent: 'G.I. Joe',	// the user agent for each request to Google (default: Chrome)
+	num: 10,				// amount of results, can be left empty but will take a lot longer
+
+	// google specific
+	rlimit: '10',			// number of requests to Google p second, default: unlimited
+	timeout: 10000,			// timeout when things go wrong, default: 10000
+	nightmare: {
+							// all the options for Nightmare, (show: true for example)
+	}	
+}
+```
+
+# License
+Copyright (c) 2015, Peter Evers <pevers90@gmail.com>
+
+Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.

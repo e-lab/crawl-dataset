@@ -15,15 +15,14 @@
     "google",
     "images"
   ],
-  "author": {
-    "name": "Peter Evers"
-  },
+  "author": "Peter Evers",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/pevers/images-scraper/issues"
   },
   "homepage": "https://github.com/pevers/images-scraper#readme",
   "dependencies": {
+    "async": "^2.0.0-rc.3",
     "bluebird": "^3.0.5",
     "chai": "^3.4.1",
     "chai-as-promised": "^5.2.0",
@@ -34,31 +33,7 @@
     "request": "^2.67.0",
     "validator": "^4.5.0"
   },
-  "gitHead": "e6e07fe68881f0d70ec5772f6c8ed36be6098de9",
-  "_id": "images-scraper@2.0.9",
-  "_shasum": "5ef5b6a78eec93d5d0845bf8810d9e047258d760",
-  "_from": "images-scraper@latest",
-  "_npmVersion": "2.15.0",
-  "_nodeVersion": "4.4.2",
-  "_npmUser": {
-    "name": "pevers",
-    "email": "pevers90@gmail.com"
-  },
-  "dist": {
-    "shasum": "5ef5b6a78eec93d5d0845bf8810d9e047258d760",
-    "tarball": "https://registry.npmjs.org/images-scraper/-/images-scraper-2.0.9.tgz"
-  },
-  "maintainers": [
-    {
-      "name": "pevers",
-      "email": "pevers90@gmail.com"
-    }
-  ],
-  "_npmOperationalInternal": {
-    "host": "packages-16-east.internal.npmjs.com",
-    "tmp": "tmp/images-scraper-2.0.9.tgz_1461608304579_0.6169774204026908"
-  },
-  "directories": {},
-  "_resolved": "https://registry.npmjs.org/images-scraper/-/images-scraper-2.0.9.tgz",
-  "readme": "ERROR: No README data found!"
+  "directories": {
+    "test": "test"
+  }
 }
