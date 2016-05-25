@@ -1,5 +1,3 @@
-//From https://github.com/pevers/images-Scraper
-
 'use strict'
 
 var Scraper = require ('./index')
