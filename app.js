@@ -11,9 +11,9 @@ var gm = require('gm')
 
 function getKeyword(callback){
 
-	const readline = require('readline')
+	var readline = require('readline')
 
-	const rl = readline.createInterface({
+	var rl = readline.createInterface({
 	  input: process.stdin,
 	  output: process.stdout
 	});
