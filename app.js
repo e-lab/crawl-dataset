@@ -16,7 +16,7 @@ google.list({
 	keyword: userinput,
 	num: 1000,
 	rlimit: '2',  // number of requests to Google p second, default: unlimited
-	timeout: 10000,
+	timeout: 1000,
 	detail: true,
 	nightmare: {
 		show: true
