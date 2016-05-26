@@ -29,11 +29,17 @@ google.list({
 .then(function (res) {
 	console.log('Results from google', res);
 
+	var fs = require('fs')
+	var dir = "./images/" + userinput + "/"
+
+	fs.mkdirSync(dir);
+
 	var downloader = function(i){
+
 		if(i <= res.length){
 			console.log('Image number: ', i, '/', res.length)
 			var url = res[i-1]['url']
-			var path = "./images/" + userinput + i + ".png"
+			var path = "./images/" + userinput + "/" + userinput + i + ".png"
 
 			var fs = require('fs'),
 			    request = require('request');
