@@ -6,7 +6,7 @@ require 'paths'
 require 'pl'
 
 opt = lapp[[
-   -h,--hflip              (default true)        horizontal flip
+   -f,--flip              (default true)        horizontal flip
    -t,--transImgInt        (default 20)          stepping of translation, number of images to create (ta/t)^2
    --ta                    (default 40)          max translation length
    -r, --rotationImg       (default 2)           number of images to create by rotation
@@ -25,7 +25,16 @@ function hflip_img(path_img, tmp_img, aug_path, img)
   local img_flip = image.hflip(img)
   -- assumes .png ending for now
   tmp_img = string.sub(tmp_img, 1, -5)
-  local img_path = aug_path .. "/" .. tmp_img .. "flip.png"
+  local img_path = aug_path .. "/" .. tmp_img .. "hflip.png"
+  image.save(img_path, img_flip)
+
+end
+function vflip_img(path_img, tmp_img, aug_path, img)
+  local tmp_path = path_img .. "/" .. tmp_img
+  local img_flip = image.vflip(img)
+  -- assumes .png ending for now
+  tmp_img = string.sub(tmp_img, 1, -5)
+  local img_path = aug_path .. "/" .. tmp_img .. "vflip.png"
   image.save(img_path, img_flip)
 
 end
@@ -39,6 +48,9 @@ function rotate_img(path_img, tmp_img, aug_path, degree, img)
   tmp_img = string.sub(tmp_img, 1, -5)
   local img_path = aug_path .. "/" .. tmp_img ..  "rotate" .. degree .. ".png"
   image.save(img_path, img_rotate)
+  if opt.flip == true then
+     hflip_img(aug_path, tmp_img .. "rotate" .. degree .. ".png", aug_path,img_rotate)
+  end
 
 end
 
@@ -63,8 +75,8 @@ function crop5_img(path_img, tmp_img, aug_path, jitter, img)
        image.save(img_path, sample)
 
 
-       if opt.hflip == true then
-         hflip_img(aug_path, tmp_img .. "crop" .. (j+(i-1)*number_img) .. ".png", aug_path,img)
+       if opt.flip == true then
+         hflip_img(aug_path, tmp_img .. "crop" .. (j+(i-1)*number_img) .. ".png", aug_path,sample)
        end
 
      end
@@ -85,9 +97,12 @@ function run_on_folder(root_path,folder_name)
          src_img_path = src_path .. tmp_img
          local img = image.load(src_img_path)
          if img:size(1) > 3 then img = img:narrow(1,1,3) end
+
          if opt.ta > 0 then
             crop5_img(src_path, tmp_img, aug_path, opt.ta, img)
-         elseif opt.hflip == true then
+         end
+
+         if opt.flip == true then
             hflip_img(src_path, tmp_img, aug_path, img)
          end
 
@@ -104,7 +119,7 @@ function mv_images(root_path,folder_name)
    target_folder = paths.concat('./augmentations/',folder_name)
    folder_path = paths.concat(root_path,folder_name)
    if not paths.dirp(target_folder) then
-      os.execute("mkdir -p " ..aug_path)
+      os.execute("mkdir -p " ..target_folder)
    end
    os.execute('cp '..folder_path..'/*.png '..target_folder)
 end
