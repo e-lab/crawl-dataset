@@ -1,7 +1,5 @@
-
-# coding: utf-8
-
-# In[6]:
+#Made by Sangpil Kim
+#Jun 2016
 
 import sys
 from selenium import webdriver
@@ -10,6 +8,23 @@ from selenium.webdriver.support.ui import WebDriverWait
 from getIdcon import getIdfromHtml
 import subprocess as sub
 import requests
+import codecs
+from bs4 import BeautifulSoup as bs4
+
+def getIdfromHtml(html):
+    #Open html file
+    f = codecs.open(html,'r', 'utf-8')
+    dom = f.read().encode('ascii','ignore')
+    f.close()
+    #make soup
+    soup = bs4(dom)
+    urls = soup.find_all(href=True)
+    #get id
+    conId = []
+    for url in urls:
+        id = url.get('href').split('=')
+        conId.append(id[1])
+    return conId
 
 def initDriver(url):
     driver = webdriver.Firefox()
@@ -27,10 +42,7 @@ def getFlickerUrls(html):
     for url in urls:
         if not 'flickr' in url:
             urls.pop()
-    return urls 
-
-
-# In[7]:
+    return urls
 
 if __name__ == '__main__':
     conId = getIdfromHtml('imDogDom.html')
@@ -39,7 +51,7 @@ if __name__ == '__main__':
     urls = getFlickerUrls(html)
     className ='dog'
     counter = 0
-    for url in urls: 
+    for url in urls:
         counter += 1
         dw = sub.call('wget '+ url +' -O ./'+className+'/img'+str(counter)+'.png',shell=True)
 

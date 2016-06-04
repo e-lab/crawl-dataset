@@ -1,7 +1,5 @@
-
-# coding: utf-8
-
-# In[50]:
+#Made by Sangpil Kim
+#Jun 2016
 
 from PIL import Image
 import os
@@ -25,4 +23,4 @@ def filterCorruptPng(rootdir):
 
 if __name__ == '__main__':
     filterCorruptPng(sys.argv[1])
-    
+
