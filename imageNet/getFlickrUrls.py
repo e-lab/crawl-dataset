@@ -44,19 +44,20 @@ def getFlickerUrls(html):
     return urls
 
 if __name__ == '__main__':
-    conId = getIdfromHtml(sys.argv[1])
-    html = getUrlsFromId(conId[0])
-    html = html.encode('ascii','ignore')
-    urls = getFlickerUrls(html)
+    conIds = getIdfromHtml(sys.argv[1])
     className = sys.argv[2]
-    counter = 0
-    for url in urls:
-        counter += 1
-        name = url.split('/')
-        print(type(name))
-        print(name[len(name)-1])
-        print '-----------------'
-        name = name[len(name)-1]
-        #dw = sub.call('wget '+ url +' -O ./'+className+'/img'+str(counter)+'.jpg',shell=True)
-        dw = sub.call('wget --timeout=5 --tries=2 -A jpeg,jpg,bmp,gif,png '+ url +' -O ./'+className+'/'+str(name),shell=True)
+    for conId in conIds:
+        html = getUrlsFromId(conId)
+        html = html.encode('ascii','ignore')
+        urls = getFlickerUrls(html)
+        counter = 0
+        for url in urls:
+            counter += 1
+            name = url.split('/')
+            print(type(name))
+            print(name[len(name)-1])
+            print '-----------------'
+            name = name[len(name)-1]
+            #dw = sub.call('wget '+ url +' -O ./'+className+'/img'+str(counter)+'.jpg',shell=True)
+            dw = sub.call('wget --timeout=5 --tries=2 -A jpeg,jpg,bmp,gif,png '+ url +' -O ./'+className+'/'+str(name),shell=True)
 
