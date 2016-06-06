@@ -44,7 +44,7 @@ def getFlickerUrls(html):
 
 if __name__ == '__main__':
     conIds = getIds(sys.argv[1])
-    className = sys.argv[2]
+#    className = sys.argv[2]
     for conId in conIds:
         html = getUrlsFromId(conId)
         html = html.encode('ascii','ignore')
@@ -58,5 +58,6 @@ if __name__ == '__main__':
             print '-----------------'
             name = name[len(name)-1]
             #dw = sub.call('wget '+ url +' -O ./'+className+'/img'+str(counter)+'.jpg',shell=True)
-            dw = sub.call('wget --timeout=5 --tries=2 -A jpeg,jpg,bmp,gif,png '+ url +' -O ./'+className+'/'+str(name),shell=True)
+            #dw = sub.call('wget --timeout=5 --tries=2 -A jpeg,jpg,bmp,gif,png '+ url +' -O ./'+className+'/'+str(name),shell=True)
+            dw = sub.call('wget --timeout=5 --tries=2 -A jpeg,jpg,bmp,gif,png '+ url +' -O ./'+str(name),shell=True)
 
