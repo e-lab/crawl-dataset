@@ -9,7 +9,7 @@ import sys
 def filterCorruptPng(rootdir):
     for subdir, dirs, files in os.walk(rootdir):
         for fileName in files:
-            if '.png'in fileName:
+            if '.jpg'in fileName:
                 filePath = os.path.join(rootdir,fileName)
                 try:
                     v_image = Image.open(filePath)

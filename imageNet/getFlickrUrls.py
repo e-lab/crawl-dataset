@@ -5,7 +5,6 @@ import sys
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from getIdcon import getIdfromHtml
 import subprocess as sub
 import requests
 import codecs
@@ -45,13 +44,19 @@ def getFlickerUrls(html):
     return urls
 
 if __name__ == '__main__':
-    conId = getIdfromHtml('imDogDom.html')
+    conId = getIdfromHtml(sys.argv[1])
     html = getUrlsFromId(conId[0])
     html = html.encode('ascii','ignore')
     urls = getFlickerUrls(html)
-    className ='dog'
+    className = sys.argv[2]
     counter = 0
     for url in urls:
         counter += 1
-        dw = sub.call('wget '+ url +' -O ./'+className+'/img'+str(counter)+'.png',shell=True)
+        name = url.split('/')
+        print(type(name))
+        print(name[len(name)-1])
+        print '-----------------'
+        name = name[len(name)-1]
+        #dw = sub.call('wget '+ url +' -O ./'+className+'/img'+str(counter)+'.jpg',shell=True)
+        dw = sub.call('wget --timeout=5 --tries=2 -A jpeg,jpg,bmp,gif,png '+ url +' -O ./'+className+'/'+str(name),shell=True)
 
