@@ -2,9 +2,7 @@
 #Jun 2016
 
 import sys
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
+import csv
 import subprocess as sub
 import requests
 import codecs
@@ -24,12 +22,13 @@ def getIdfromHtml(html):
         id = url.get('href').split('=')
         conId.append(id[1])
     return conId
-
-def initDriver(url):
-    driver = webdriver.Firefox()
-    driver.wait = WebDriverWait(driver,1)
-    driver.get(url)
-    return driver
+def getIds(csvFile):
+    conIds = []
+    with open(csvFile, 'rb') as f:
+         reader = csv.reader(f)
+         for row in reader:
+             conIds.append(row[0])
+    return conIds
 def getUrlsFromId(id):
     url = 'http://www.image-net.org/api/text/imagenet.synset.geturls?wnid='+id
     r = requests.get(url)
@@ -44,7 +43,7 @@ def getFlickerUrls(html):
     return urls
 
 if __name__ == '__main__':
-    conIds = getIdfromHtml(sys.argv[1])
+    conIds = getIds(sys.argv[1])
     className = sys.argv[2]
     for conId in conIds:
         html = getUrlsFromId(conId)
@@ -59,5 +58,5 @@ if __name__ == '__main__':
             print '-----------------'
             name = name[len(name)-1]
             #dw = sub.call('wget '+ url +' -O ./'+className+'/img'+str(counter)+'.jpg',shell=True)
-            dw = sub.call('wget --timeout=5 --tries=2 -A jpeg,jpg,bmp,gif,png '+ url +' -O ./'+className+'/'+str(name),shell=True)
+            dw = sub.call('wget --timeout=5 --tries=2 -A jpeg,jpg,bmp,gif,png '+ url +' -O ./'+className+'/'+str(name)+'.jpg',shell=True)
 
