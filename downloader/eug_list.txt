@@ -19,11 +19,10 @@ cellphone
 tablet
 laptop
 computer
-PC
 remote control
-cup/mug
+cup
 bottle
-soda can
+soda_can
 fork
 knife
 spoon
