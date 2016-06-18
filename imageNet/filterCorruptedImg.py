@@ -1,5 +1,5 @@
 #Made by Sangpil Kim
-#Jun 2016
+#June 2016
 
 from PIL import Image
 import os
