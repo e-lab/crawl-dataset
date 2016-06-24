@@ -19,9 +19,8 @@ def filterCorruptPng(rootdir):
     for d in di:
         for subdir, dirs, files in os.walk(d):
             for fileName in files:
-                if '.png'in fileName:
+                if '.jpeg'in fileName:
                     filePath = join(d,fileName)
-                    print (filePath+' check')
                     try:
                         v_image = Image.open(filePath)
                         si = os.path.getsize(filePath)

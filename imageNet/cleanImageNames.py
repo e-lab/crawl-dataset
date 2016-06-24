@@ -21,30 +21,20 @@ for subdirs_, dirs_, files_ in os.walk(rootDir):
 for i in range(1,len(conDirs)):
     print(conDirs[i])
     subDir = conDirs[i]
+    counter = 0
     for fileName in os.listdir(subDir):
+        print('%d th image processing' %(counter))
+        counter += 1
         fileName = join(subDir,fileName)
         if os.path.isfile(fileName):
             if 'py' in fileName:
                 os.remove(fileName)
             if 'csv' in fileName:
                 os.remove(fileName)
-            if '\r' or '^M'in fileName:
-                counter += 1
-                print('%d/%d' %(counter,len(fileName)))
-                check = False
-                for ext in extList:
-                    if ext in fileName:
-                        check = True
-                        newName = fileName.replace(ext+'\r',ext)
-                if not check:
-                    newName = fileName.replace('\r','') + '.png'
-                #print(fileName)
-                newName = join(subDir,newName)
-                try:
-                    os.rename(fileName,newName)
-                except:
-                    failCon.append(fileName)
-                    print('Fail')
-    '''
-print(failCon)
-print(len(failCon))
+            folderName = subDir.split('/')
+            newName = str(folderName[len(folderName)-1])+'_'+str(counter)+'.jpeg'
+            newName = join(subDir,newName)
+            try:
+                os.rename(fileName,newName)
+            except:
+                print('Fail')
