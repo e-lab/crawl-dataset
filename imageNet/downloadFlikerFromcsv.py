@@ -1,5 +1,5 @@
 #Made by Sangpil Kim
-#Jun 2016
+#June 2016
 
 import sys
 import csv
@@ -24,13 +24,14 @@ def getIdfromHtml(html):
     return conId
 def getIds(csvFile):
     conIds = []
-    with open(csvFile, 'rb') as f:
+    with open(csvFile, 'r') as f:
          reader = csv.reader(f)
          for row in reader:
              conIds.append(row[0])
     return conIds
 def getUrlsFromId(id):
     url = 'http://www.image-net.org/api/text/imagenet.synset.geturls?wnid='+id
+    print(url)
     r = requests.get(url)
     html = r.text
     return html
@@ -43,21 +44,23 @@ def getFlickerUrls(html):
     return urls
 
 if __name__ == '__main__':
+    className = sys.argv[1].replace('.csv','')
     conIds = getIds(sys.argv[1])
 #    className = sys.argv[2]
     for conId in conIds:
+        print(conId)
         html = getUrlsFromId(conId)
-        html = html.encode('ascii','ignore')
+        #html = html.encode('ascii','ignore')
+        html = str(html)
         urls = getFlickerUrls(html)
         counter = 0
         for url in urls:
-            counter += 1
-            name = url.split('/')
-            print(type(name))
-            print(name[len(name)-1])
-            print '-----------------'
-            name = name[len(name)-1]
-            #dw = sub.call('wget '+ url +' -O ./'+className+'/img'+str(counter)+'.jpg',shell=True)
-            #dw = sub.call('wget --timeout=5 --tries=2 -A jpeg,jpg,bmp,gif,png '+ url +' -O ./'+className+'/'+str(name),shell=True)
-            dw = sub.call('wget --timeout=5 --tries=2 -A jpeg,jpg,bmp,gif,png '+ url +' -O ./'+str(name),shell=True)
+            try:
+                counter += 1
+                print ('-----------------')
+                filePath = className+'/'+className+'_'+str(counter)+'.jpeg'
+                print(filePath)
+                dw = sub.call('wget --timeout=5 --tries=2 -A jpeg,jpg,bmp,gif,png '+ url +' -O ./'+filePath ,shell=True)
+            except:
+                print('Fail')
 
