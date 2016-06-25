@@ -1,5 +1,6 @@
 #Made by Sangpil Kim
 #June 2016
+#python 3.5
 
 import sys
 import csv
@@ -58,7 +59,7 @@ if __name__ == '__main__':
             try:
                 counter += 1
                 print ('-----------------')
-                filePath = className+'/'+className+'_'+str(counter)+'.jpeg'
+                filePath = className+'/'+className+'_flickr_'+str(counter)+'.jpeg'
                 print(filePath)
                 dw = sub.call('wget --timeout=5 --tries=2 -A jpeg,jpg,bmp,gif,png '+ url +' -O ./'+filePath ,shell=True)
             except:
