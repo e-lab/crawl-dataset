@@ -5,26 +5,38 @@ var EventEmitter = require('events')
 	emitter.setMaxListeners(0)
 
 var Scraper = require ('./index')
-  , google = new Scraper.Google()
+//  , google = new Scraper.Google()
+    , bing = new Scraper.Bing()
 
 var gm = require('gm')
 
 const userinput = process.argv[2]
 
 	// will take ALOT of time if num=undefined
-google.list({
-	keyword: userinput,
-	num: 1000,
-	rlimit: '2',  // number of requests to Google p second, default: unlimited
-	timeout: 1000,
-	detail: true,
-	nightmare: {
-		show: true
-	},
-  advanced: {
-    imgType: 'photo', // options: clipart, face, lineart, news, photo
-    resolution: 'm' // options: l(arge), m(edium), i(cons), etc.
-  }
+// google.list({
+// 	keyword: userinput,
+// 	num: 1000,
+// 	rlimit: '2',  // number of requests to Google p second, default: unlimited
+// 	timeout: 1000,
+// 	detail: true,
+// 	nightmare: {
+// 		show: true
+// 	},
+//   advanced: {
+//     imgType: 'photo', // options: clipart, face, lineart, news, photo
+//     resolution: 'm' // options: l(arge), m(edium), i(cons), etc.
+//   }
+// })
+
+bing.list({
+    keyword: userinput,
+    num: 100000,
+ 	timeout: 100,
+ 	detail: true,
+ 	nightmare: {
+ 		show: true
+ 	},
+    detail: true
 })
 .then(function (res) {
 	console.log('Results from google', res);
@@ -70,18 +82,18 @@ google.list({
 						  }
 
 						  downloader(i+1)
-						  
+
 						});
 					});
 				}
-			}).on('error', function (err) { 
+			}).on('error', function (err) {
 				console.log('err',err)
 			});
 		}
 	}
 
 	downloader(1)
-	
+
 }).catch(function(err) {
 	console.log('err',err)
 });
