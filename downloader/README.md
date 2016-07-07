@@ -17,3 +17,10 @@ Simple usage
 ```
 node app.js
 ```
+To use wordnet.py
+
+Need to install nltk and nltk.download('all')
+
+```
+pip3 install nltk
+```
