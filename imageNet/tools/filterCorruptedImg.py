@@ -5,7 +5,7 @@ from PIL import Image
 import os
 from os.path import join
 import fnmatch
-import subprocess as sub
+from subprocess import run
 import sys
 from pathlib import Path as path
 di = []
@@ -25,11 +25,13 @@ def filterCorruptPng(rootdir):
                         v_image = Image.open(filePath)
                         si = os.path.getsize(filePath)
                         if si == 2051 or si < 15000:
+                            filePath = os.getcwd()+'/'+filePath
                             print (filePath+' delete')
-                            rm = sub.call('rm -rf '+filePath,shell=True)
+                            run(['rm', '-rf', str(filePath)])
                     except:
+                        filePath = os.getcwd()+'/'+filePath
                         print (filePath+' delete')
-                        rm = sub.call('rm -rf '+filePath,shell=True)
+                        run(['rm', '-rf', str(filePath)])
 if __name__ == '__main__':
     filterCorruptPng(sys.argv[1])
 

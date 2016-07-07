@@ -4,7 +4,7 @@ cleanNoneImg.sh will delete files which are not has extention such as .jpeg or .
 
 createStatic.py will iter directories and create statics of images
 
-filterCorruptedImg.py will delete corrupted files
+filterCorruptedImg.py will delete corrupted files, This is only for one-depth file appliable
 
 
 

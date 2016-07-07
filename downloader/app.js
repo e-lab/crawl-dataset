@@ -42,7 +42,7 @@ bing.list({
 	console.log('Results from google', res);
 
 	var fs = require('fs')
-	var dir = "./images/" + userinput + "/"
+	var dir = "./_tmp_/" + userinput + "/"
 
 	fs.mkdirSync(dir);
 
@@ -51,7 +51,7 @@ bing.list({
 		if(i <= res.length){
 			console.log('Image number: ', i, '/', res.length)
 			var url = res[i-1]['url']
-			var path = "./images/" + userinput + "/" + userinput + i + ".png"
+			var path = "./_tmp_/" + userinput + "/" + userinput + i + ".png"
 
 			var fs = require('fs'),
 			    request = require('request');
