@@ -11,6 +11,7 @@ var Scraper = require ('./index')
 var gm = require('gm')
 
 const userinput = process.argv[2]
+const saveFile = process.argv[3]
 
 	// will take ALOT of time if num=undefined
 // google.list({
@@ -42,7 +43,7 @@ bing.list({
 	console.log('Results from google', res);
 
 	var fs = require('fs')
-	var dir = "./_tmp_/" + userinput + "/"
+	var dir = "./"+saveFile+"/" + userinput + "/"
 
 	fs.mkdirSync(dir);
 
@@ -51,7 +52,7 @@ bing.list({
 		if(i <= res.length){
 			console.log('Image number: ', i, '/', res.length)
 			var url = res[i-1]['url']
-			var path = "./_tmp_/" + userinput + "/" + userinput + i + ".png"
+			var path = "./"+saveFile+"/" + userinput + "/" + userinput + i + ".png"
 
 			var fs = require('fs'),
 			    request = require('request');
