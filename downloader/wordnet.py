@@ -63,7 +63,7 @@ def getImage(query,dstFile):
                             index +=1
 
     print(keywords)
-    rootFile = '_tmp_'
+    rootFile = '_'+dstFile
     ensure_dir(rootFile)
     for word in keywords:
         try:
