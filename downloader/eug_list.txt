@@ -13,7 +13,8 @@ tree
 grass
 ceiling
 floor
-walls
+inside wall
+outside wall
 television
 cellphone
 tablet
