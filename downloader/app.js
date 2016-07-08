@@ -54,7 +54,7 @@ bing.list({
 
     var rootD = "./"+saveFile+"/"
 	var dir = rootD + userinput + "/"
-	var json_dir = "./json/"
+	var json_dir = "./json_"+userinput + "/"
 
 	fs.mkdirSync(dir);
 	fs.mkdirSync(json_dir)
