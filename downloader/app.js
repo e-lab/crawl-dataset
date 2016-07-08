@@ -54,17 +54,17 @@ bing.list({
 
     var rootD = "./"+saveFile+"/"
 	var dir = rootD + userinput + "/"
-	var json_dir = "./json_"+userinput + "/"
+//	var json_dir = dir+"json_"+userinput + "/"
 
 	fs.mkdirSync(dir);
-	fs.mkdirSync(json_dir)
+//	fs.mkdirSync(json_dir)
 
-	var json_path = json_dir + userinput + "_json.txt"
+//	var json_path = json_dir + userinput + "_json.txt"
 
 	//writes json string to file in json folder
-	fs.writeFile(json_path, json_string, function (err) {
-	  if (err) return console.log(err);
-	});
+//	fs.writeFile(json_path, json_string, function (err) {
+//	  if (err) return console.log(err);
+//	});
 
 	var downloader = function(i){
 
