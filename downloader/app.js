@@ -42,11 +42,29 @@ bing.list({
 .then(function (res) {
 	console.log('Results from google', res);
 
+	var json_string = ""
+
+	//converts response json to string
+	for(var k = 0; k < res.length; k++) {
+		json_string += JSON.stringify(res[k])
+		json_string += '\n'
+	}
+
 	var fs = require('fs')
+
     var rootD = "./"+saveFile+"/"
 	var dir = rootD + userinput + "/"
+	var json_dir = "./json/"
 
 	fs.mkdirSync(dir);
+	fs.mkdirSync(json_dir)
+
+	var json_path = json_dir + userinput + "_json.txt"
+
+	//writes json string to file in json folder
+	fs.writeFile(json_path, json_string, function (err) {
+	  if (err) return console.log(err);
+	});
 
 	var downloader = function(i){
 
