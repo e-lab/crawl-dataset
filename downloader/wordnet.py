@@ -66,9 +66,12 @@ def getImage(query,dstFile):
     rootFile = '_tmp_'
     ensure_dir(rootFile)
     for word in keywords:
+        try:
             if not query in word:
                 word = word + ' ' + query
             call(["node", "app.js", word])
+        except:
+            print('Failed')
     # Change folder name
     call(["mv", rootFile, str(query)])
     call(["mv", query, dstFile])

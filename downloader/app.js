@@ -30,7 +30,7 @@ const userinput = process.argv[2]
 
 bing.list({
     keyword: userinput,
-    num: 100000,
+    num: 100000000000,
  	timeout: 100,
  	detail: true,
  	nightmare: {
