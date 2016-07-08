@@ -43,7 +43,8 @@ bing.list({
 	console.log('Results from google', res);
 
 	var fs = require('fs')
-	var dir = "./"+saveFile+"/" + userinput + "/"
+    var rootD = "./"+saveFile+"/"
+	var dir = rootD + userinput + "/"
 
 	fs.mkdirSync(dir);
 
@@ -52,7 +53,7 @@ bing.list({
 		if(i <= res.length){
 			console.log('Image number: ', i, '/', res.length)
 			var url = res[i-1]['url']
-			var path = "./"+saveFile+"/" + userinput + "/" + userinput + i + ".png"
+			var path = rootD + userinput + "/" + userinput + i + ".png"
 
 			var fs = require('fs'),
 			    request = require('request');
@@ -69,12 +70,12 @@ bing.list({
 
 
 					console.log('Downloading image now...')
-
+                    // Here may need time out for long downloading time for some images
 					request(url).pipe(fs.createWriteStream(path)).on('close', function(){
 						console.log('Download success')
 
 						gm(path)
-						.resize(400)
+						.resize(256)
 						.write(path, function (err) {
 						  if (!err){
 						  	console.log('Image has been resized\n');

@@ -23,4 +23,13 @@ Need to install nltk and nltk.download('all')
 
 ```
 pip3 install nltk
+
 ```
+
+Need to install imagemagick graphicsmagick for node gm
+
+
+```
+sudo apt-get install imagemagick graphicsmagick
+```
+
