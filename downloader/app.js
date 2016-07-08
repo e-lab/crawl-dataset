@@ -18,7 +18,7 @@ const saveFile = process.argv[3]
 // 	keyword: userinput,
 // 	num: 1000,
 // 	rlimit: '2',  // number of requests to Google p second, default: unlimited
-// 	timeout: 1000,
+// 	setTimeout(function() {}, 10);: 1000,
 // 	detail: true,
 // 	nightmare: {
 // 		show: true
@@ -70,8 +70,19 @@ bing.list({
 
 
 					console.log('Downloading image now...')
+
+					//options to timeout when downloading the image
+					var options = {
+						url:  url,
+					    timeout: 10000
+					}
                     // Here may need time out for long downloading time for some images
-					request(url).pipe(fs.createWriteStream(path)).on('close', function(){
+					request(options, function(err, res, body){
+						if(err) {
+							console.log('Download timed out...\n')
+							downloader(i+1)
+						}
+					}).pipe(fs.createWriteStream(path)).on('close', function(){
 						console.log('Download success')
 
 						gm(path)
