@@ -7,8 +7,8 @@ require 'pl'
 require 'nn'
 require 'sys'
 require 'image'
-require 'cudnn'
-require 'cunn'
+--require 'cudnn'
+--require 'cunn'
 require 'qtwidget'
 prediction = require 'prediction'
 show       = require 'show'
@@ -20,16 +20,18 @@ non = sys.COLORS.none
 local video = assert(require("libvideo_decoder"))
 
 -- Options ---------------------------------------------------------------------
-opt = lapp([[
+opt = lapp[[
 -v, --videoPath    (default 'Euge-home-video-small.mp4')    path to video file
 -m, --model        (default './models/m_res34_last_aug.t7')
 -c, --classes      (default 'classes.t7')
 -r, --ratio        (default 0.6)
 -b, --batch        (default 3)
 -n, --nShow        (default 3)
-]])
+-s, --stat         (default 'stat.t7')
+]]
 
 torch.setdefaulttensortype('torch.FloatTensor')
+print(opt)
 -- load a video and extract frame dimensions
 local status, height, width, length, fps = video.init(opt.videoPath)
 opt.width  = width
@@ -45,12 +47,10 @@ local dst = torch.Tensor(3, height, width)
 
 -- load model
 model_path = opt.model
-stat_path = './stat/stat.t7'
 m = torch.load(model_path)
 m:evaluate()
-m:add(cudnn.SoftMax():cuda())
-m:cuda()
-stat = torch.load(stat_path)
+m:add(nn.SoftMax())
+stat = torch.load(opt.stat)
 
 -- classes
 classes = torch.load(opt.classes)

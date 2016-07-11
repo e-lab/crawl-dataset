@@ -36,8 +36,7 @@ function window_create(opt, classes)
    fps_x   = result_x
    fps_y   = board_y
    if not win then
-      win = qtwidget.newwindow(win_w,win_h,'Class 620 Sangpil Kim PR2')
-      --win = qtwidget.newwindow(win_w,win_h,'e-data demo')
+      win = qtwidget.newwindow(win_w,win_h,'e-data demo')
    else
       win:resize(win_w,win_h)
    end
@@ -68,7 +67,7 @@ function window_create(opt, classes)
 
          win:moveto(fps_x,fps_y)
          win:setcolor(1.0,0.6,0.6)
-         --win:show(string.format('fps : %.2f', torch.mean(fps_avg)))
+         win:show(string.format('fps : %.2f', torch.mean(fps_avg)))
 
          win:setcolor(1.0,0.0,0.0)
          if batch_idx == batch then
@@ -77,13 +76,13 @@ function window_create(opt, classes)
          else
             idx = idx_old
          end
- --        if check > batch then
- --           for i = 1, show_n do
- --              local loc_y = result_y + space*i
- --              win:moveto(result_x,loc_y)
- --              win:show(string.format('%s', classes[idx[i]]))
- --           end
- --        end
+         if check > batch then
+            for i = 1, show_n do
+               local loc_y = result_y + space*i
+               win:moveto(result_x,loc_y)
+               win:show(string.format('%s', classes[idx[i]]))
+            end
+         end
          check = check + 1
          idx_old = idx
          win:gend()

@@ -35,7 +35,7 @@ local function init_(dst, model, stat)
     prediction.forward =
     function (dst)
        input = preprocess(dst, stat)
-       output = model:forward(input:cuda())
+       output = model:forward(input)
        return output
     end
 end
