@@ -31,7 +31,8 @@ function window_create(opt, classes)
    board_w = board_x + win_w/division*2
    board_h = board_y + win_h/division*2
    space = (board_h - board_y)/(show_n+ text_size - show_n +1) * 2
-   result_x = board_x + win_w/division + space
+   --result_x = board_x + win_w/(1.4*division) + space
+   result_x = board_x/2
    result_y = board_y
    fps_x   = result_x
    fps_y   = board_y
@@ -71,7 +72,7 @@ function window_create(opt, classes)
 
          win:setcolor(1.0,0.0,0.0)
          if batch_idx == batch then
-            _, idx = results_mean:sort(1,true)
+            pp, idx = results_mean:sort(1,true)
             idx = idx:squeeze()
          else
             idx = idx_old
@@ -80,7 +81,11 @@ function window_create(opt, classes)
             for i = 1, show_n do
                local loc_y = result_y + space*i
                win:moveto(result_x,loc_y)
-               win:show(string.format('%s', classes[idx[i]]))
+               if pp[i] > opt.th then
+                  win:show(string.format('%s %.4f', classes[idx[i]] , pp[i]))
+               else
+                  win:show(string.format('Not above threshold'))
+               end
             end
          end
          check = check + 1

@@ -28,6 +28,7 @@ opt = lapp[[
 -b, --batch        (default 3)
 -n, --nShow        (default 3)
 -s, --stat         (default 'stat.t7')
+-t, --th           (default 0.02)
 ]]
 
 torch.setdefaulttensortype('torch.FloatTensor')
