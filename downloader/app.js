@@ -92,7 +92,7 @@ bing.list({
 					//options to timeout when downloading the image
 					var options = {
 						url:  url,
-					    timeout: 10000
+					    timeout: 300
 					}
                     // Here may need time out for long downloading time for some images
 					request(options, function(err, res, body){
