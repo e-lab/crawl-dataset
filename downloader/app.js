@@ -42,29 +42,20 @@ bing.list({
 .then(function (res) {
 	console.log('Results from google', res);
 
-	var json_string = ""
+	var dic_array = res
 
-	//converts response json to string
-	for(var k = 0; k < res.length; k++) {
-		json_string += JSON.stringify(res[k])
-		json_string += '\n'
-	}
+	var json_string = ""
 
 	var fs = require('fs')
 
     var rootD = "./"+saveFile+"/"
 	var dir = rootD + userinput + "/"
-//	var json_dir = dir+"json_"+userinput + "/"
+	var json_dir = dir+"json_"+userinput + "/"
 
 	fs.mkdirSync(dir);
-//	fs.mkdirSync(json_dir)
+	fs.mkdirSync(json_dir)
 
-//	var json_path = json_dir + userinput + "_json.txt"
-
-	//writes json string to file in json folder
-//	fs.writeFile(json_path, json_string, function (err) {
-//	  if (err) return console.log(err);
-//	});
+	var json_path = json_dir + userinput + "_json.txt"
 
 	var downloader = function(i){
 
@@ -102,6 +93,15 @@ bing.list({
 						}
 					}).pipe(fs.createWriteStream(path)).on('close', function(){
 						console.log('Download success')
+
+						var dic = {url: dic_array[i-1]['url'], path: path}
+						json_string += JSON.stringify(dic)
+						json_string += '\n'
+
+						//writes json string to file in json folder
+						fs.writeFile(json_path, json_string, function (err) {
+						  if (err) return console.log(err);
+						});
 
 						gm(path)
 						.resize(256)

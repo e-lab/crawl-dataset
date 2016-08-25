@@ -69,7 +69,7 @@ def getImage(query,dstFile):
         try:
             if not query in word:
                 word = word + ' ' + query
-            call(["node", "app.js", word])
+            call(["node", "app.js", word, "images"])
         except:
             print('Failed')
     # Change folder name
@@ -87,6 +87,7 @@ def readCSV(fileName):
 csvFile = sys.argv[1]
 saveFile = csvFile.replace('.csv','')
 ensure_dir(saveFile)
+ensure_dir("images")
 names = readCSV(csvFile)
 for name in names:
     try:
