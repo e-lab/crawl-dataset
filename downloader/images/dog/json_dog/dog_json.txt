@@ -1,5 +1,0 @@
-{"url":"http://1.bp.blogspot.com/-KhiJ6WYQn8Q/T7ZXxb_KHxI/AAAAAAAABvM/_l134PCuEcA/s1600/dog+photos+3.jpg","path":"./images/dog/dog1.png"}
-{"url":"http://3.bp.blogspot.com/-eu-K8n2CrVg/Tokr5uE9N2I/AAAAAAAAAjI/DPXjw3Gq_xw/s1600/Canaan-Dog.jpg","path":"./images/dog/dog2.png"}
-{"url":"http://mardaloopdoggiedaycare.com/wp-content/uploads/2014/12/cute-dog2.jpg","path":"./images/dog/dog3.png"}
-{"url":"http://www.drodd.com/images12/pictures-of-dogs233.jpg","path":"./images/dog/dog4.png"}
-{"url":"http://4.bp.blogspot.com/-b7ndmrdsKGI/TWB53z9rf-I/AAAAAAAAA58/HRbkPkricOg/s1600/fde.jpg","path":"./images/dog/dog5.png"}
