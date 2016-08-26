@@ -3,7 +3,6 @@ require 'cudnn'
 require 'paths'
 require 'image'
 
-opts = assert(require'opts')
 lapp = require 'pl.lapp'
 opt = lapp[[
  -r, --root        (default 'res34AugLast')
@@ -77,7 +76,11 @@ probs, indexes = output:topk(1, true, true)
 --Check with classes
 for i in pairs(classes) do
    if i == indexes:squeeze() then
-   print(classes[i])
+      print('Classes:')
+      print(classes[i])
+      probs = probs:squeeze()
+      print('Probability: ')
+      print(math.exp(probs))
    end
 end
 
