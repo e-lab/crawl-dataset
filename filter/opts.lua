@@ -2,17 +2,21 @@
 -- July 2016
 -- Test Filter for edataset
 require 'pl'
+lapp = require 'pl.lapp'
 
 local opts = {}
 
 --This is example for opt lua code will add in a filter module
-function opts.parse(arg)
-   local opt = lapp [[
-   Command line options:
-   -m, --model       (default '/media/HDD1/flickr/checkpoints/res34AugFine/model_17.t7')   Model path
-   -c, --classes     (default '/media/HDD1/flickr/checkpoints/res34AugFine/classes.t7') Classes categories
-   -d, --dst         (default 'dst')     Destination dir
-   -s, --src         (default 'src')     Soruce dir
+function opts.parse()
+   local opt = lapp[[
+    -r, --root        (default 'res34AugLast')
+    -m, --model       (default 'model_7.t7')
+    -c, --classes     (default 'classes.t7')
+    -s, --stat        (default 'stat.t7')
+    -d, --dst         (default 'dst')     Destination dir
+    -s, --src         (default 'dataset')     Source dir
+    --manualSeed      (default 1)
+    --GPU             (default 1)
    ]]
    return opt
 end

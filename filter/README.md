@@ -1,4 +1,12 @@
 This is example of filtering collected images
 
-TO DO: add creating folders , moving images based on predictions
-Model Location : GPU8 /home/spk/git/crawl-dataset/filter/res34AugLast
+Dependancy:
+https://github.com/gummesson/file.lua
+https://mail.google.com/mail/u/0/?tab=wm#inbox/156c76b03589f919
+
+To run:
+```
+th filterTest.lua
+```
+
+utils.lua : has functions for filterTest

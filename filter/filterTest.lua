@@ -2,7 +2,10 @@ require 'nn'
 require 'cudnn'
 require 'paths'
 require 'image'
-
+require 'utils'
+local opts = require 'opts'
+opt = opts.parse()
+print(opt)
 function getClass (o, c, i, truepath, falsepath)
    iPath = paths.concat(o,c,i)
    local input, img
@@ -57,12 +60,12 @@ function getClass (o, c, i, truepath, falsepath)
    --moves images to corresponding folders based on filter response
    if class == c and tonumber(prob) >= 0.5 then
       toPath = paths.concat(truepath, i)
-      file.move(iPath, toPath)
-      print('TRUE: file moved from\n' .. iPath .. '\nto\n' .. toPath)
+      file.copy(iPath, toPath)
+      print('TRUE: file copied from\n' .. iPath .. '\nto\n' .. toPath)
    else
       toPath = paths.concat(falsepath, i)
-      file.move(iPath, toPath)
-      print('FALSE: file moved from\n' .. iPath .. '\nto\n' .. toPath)
+      file.copy(iPath, toPath)
+      print('FALSE: file copied from\n' .. iPath .. '\nto\n' .. toPath)
    end
 
    -- for i in pairs(classes) do
@@ -78,19 +81,6 @@ function getClass (o, c, i, truepath, falsepath)
    -- end
 end
 
-lapp = require 'pl.lapp'
-opt = lapp[[
- -r, --root        (default 'res34AugLast')
- -m, --model       (default 'model_7.t7')
- -c, --classes     (default 'classes.t7')
- -s, --stat        (default 'stat.t7')
- -d, --dst         (default 'dst')     Destination dir
- -s, --src         (default 'dataset')     Source dir
- --manualSeed      (default 1)
- --GPU             (default 1)
-]]
-
-print(opt)
 cutorch.setDevice(opt.GPU) -- by default, use GPU 1
 torch.manualSeed(opt.manualSeed)
 
@@ -104,17 +94,12 @@ classes = torch.load(cPath)
 stat    = torch.load(sPath)
 std     = stat.std
 mean    = stat.mean
+flag = false
 
-print(std)
-print(mean)
 
---delete filtereddataset folder and creates a new one
+-- Main loop
 filteredDatasetPath = paths.concat(opt.src, 'filteredDataSet')
-paths.rmall(filteredDatasetPath, 'yes')
-paths.mkdir(filteredDatasetPath)
-
---Create Functions below
---Create New Folders if not exist e.g. TrueSofa FalseSofa
+checkPaths(filteredDatasetPath)
 
 --Iterates through all subdirectories of dataset folder
 for c in paths.files(opt.src) do
@@ -122,20 +107,21 @@ for c in paths.files(opt.src) do
       --create folders for correct and incorrect class predictions, ex: sofaTRUE and sofaFALSE
       truepath = paths.concat(opt.src, 'filteredDataSet', c .. "TRUE")
       falsepath = paths.concat(opt.src, 'filteredDataSet', c .. "FALSE")
-      paths.mkdir(truepath)
-      paths.mkdir(falsepath)
-
-      p = paths.concat(opt.src, c)
-      for i in paths.files(p) do
-         if i ~= '..' and i ~= '.' then
-            getClass(opt.src, c, i, truepath, falsepath)
+      --Check path exist if not creath dir
+      flag = checkPaths(truepath)
+      flag = checkPaths(falsepath)
+      -- Check if work has been done with flag is true do work
+      if flag then
+         p = paths.concat(opt.src, c)
+         for i in paths.files(p) do
+            if i ~= '..' and i ~= '.' then
+               getClass(opt.src, c, i, truepath, falsepath)
+            end
          end
       end
    end
 end
 
---Create Functions below
---If Folder name and prediction is match then move to TrueSofa else FalseSofa folder
 
 
 
