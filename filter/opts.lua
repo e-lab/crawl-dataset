@@ -14,9 +14,10 @@ function opts.parse()
     -c, --classes     (default 'classes.t7')
     -s, --stat        (default 'stat.t7')
     -d, --dst         (default 'dst')     Destination dir
-    -s, --src         (default 'dataset')     Source dir
+    --src         (default 'dataset')     Source dir
     --manualSeed      (default 1)
     --GPU             (default 1)
+    --th              (default 0.3)      Threshold
    ]]
    return opt
 end

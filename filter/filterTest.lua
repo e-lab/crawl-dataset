@@ -102,7 +102,7 @@ function getClass (o, c, i, truepath, falsepath, resizeFail)
    print(iPath)
 
    --moves images to corresponding folders based on filter response
-   if class == c and tonumber(prob) >= 0.5 then
+   if class == c and tonumber(prob) >= opt.th then
       toPath = paths.concat(truepath, i)
       file.copy(iPath, toPath)
       print('TRUE: file copied from\n' .. iPath .. '\nto\n' .. toPath)
@@ -143,16 +143,18 @@ resizeFail = {}
 
 
 -- Main loop
-filteredDatasetPath = paths.concat(opt.src, 'filteredDataSet')
-checkPaths(filteredDatasetPath)
+filteredTrueDatasetPath = paths.concat(opt.src, 'filteredFalseDataSet')
+filteredFalseDatasetPath = paths.concat(opt.src, 'filteredTrueDataSet')
+checkPaths(filteredTrueDatasetPath)
+checkPaths(filteredFalseDatasetPath)
 
 --Iterates through all subdirectories of dataset folder
 for c in paths.files(opt.src) do
    check = checkClassExist(c)
-   if c ~= '..' and c ~= '.' and c~= 'filteredDataSet' and check then
+   if c ~= '..' and c ~= '.' and c~= 'filteredFalseDataSet' and c ~= 'filteredTrueDataSet' and check then
       --create folders for correct and incorrect class predictions, ex: sofaTRUE and sofaFALSE
-      truepath = paths.concat(opt.src, 'filteredDataSet', c .. "TRUE")
-      falsepath = paths.concat(opt.src, 'filteredDataSet', c .. "FALSE")
+      truepath = paths.concat(opt.src, 'filteredTrueDataSet', c )
+      falsepath = paths.concat(opt.src, 'filteredFalseDataSet', c )
       --Check path exist if not creath dir
       flag = checkPaths(truepath)
       flag = checkPaths(falsepath)
