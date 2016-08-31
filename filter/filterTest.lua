@@ -22,44 +22,54 @@ function getClass (o, c, i, truepath, falsepath, resizeFail)
    local eye = 224
 
    --crop and resizing
-                                                                               
- local function resize_image(iPath, dim, inner_crop, offset)                
-    local crop_mode = (inner_crop and ('^'..dim)) or tostring(dim)             
-    local outer_crop = not inner_crop                                          
-                                                                               
-                                                                               
-    -- load and rescale image from iPath                                         
-    local x = image.load(iPath)                                                  
-    x = image.scale(x, crop_mode)                                              
-                                                                               
-    -- consider 2-dim image                                                    
-    x = ((x:dim() == 2) and x:view(1, x:size(1), x:size(2))) or x              
-                                                                               
-    -- consider greyscale image                                                
-    x = ((x:size(1) == 1) and x:repeatTensor(3,1,1)) or x                      
-                                                                               
-    -- consider RGBA image                                                     
-    x = ((x:size(1) > 3) and x[{{1,3},{},{}}]) or x                            
-                                                                               
-                                                                               
-    -- calculate coordinate for crop (left top of box)                         
-    local lbox = math.floor(math.abs(x:size(3) - dim)/2 + 1)                   
-    local tbox = math.floor(math.abs(x:size(2) - dim)/2 + 1)                   
-                                                                               
-    -- copy paste to y depending on crop_mode                                  
-    local y                                                                    
-    if inner_crop then                                                         
-       y = x[{{},{tbox,tbox+dim-1},{lbox,lbox+dim-1}}]                         
-    elseif outer_crop then                                                     
-       y = torch.Tensor():typeAs(x):resize(3, dim, dim):fill(offset)           
-       y[{{},{tbox,tbox+x:size(2)-1},{lbox,lbox+x:size(3)-1}}]:copy(x)         
-    end                                                                        
-                                                                               
-    -- save image to dst path                                                  
-    return y                                                         
- end                                                                           
+
+ local function resize_image(iPath, dim, inner_crop, offset)
+    local crop_mode = (inner_crop and ('^'..dim)) or tostring(dim)
+    local outer_crop = not inner_crop
+
+
+    -- load and rescale image from iPath
+    local x = image.load(iPath)
+    print('Law image size')
+    print(x:size())
+--    x = image.scale(x, crop_mode)
+
+    -- consider 2-dim image
+    x = ((x:dim() == 2) and x:view(1, x:size(1), x:size(2))) or x
+
+    -- consider greyscale image
+    x = ((x:size(1) == 1) and x:repeatTensor(3,1,1)) or x
+
+    -- consider RGBA image
+    x = ((x:size(1) > 3) and x[{{1,3},{},{}}]) or x
+
+    local cs , y
+    if x:size(2) > x:size(3) then
+       cs = x:size(3)
+    else
+       cs = x:size(2)
+    end
+    x = image.crop(x,'c',cs,cs)
+    y = image.scale(x,eye,eye)
+
+--[[
+    -- calculate coordinate for crop (left top of box)
+    local lbox = math.floor(math.abs(x:size(3) - dim)/2 + 1)
+    local tbox = math.floor(math.abs(x:size(2) - dim)/2 + 1)
+
+    -- copy paste to y depending on crop_mode
+    local y
+    if inner_crop then
+       y = x[{{},{tbox,tbox+dim-1},{lbox,lbox+dim-1}}]
+    elseif outer_crop then
+       y = torch.Tensor():typeAs(x):resize(3, dim, dim):fill(offset)
+       y[{{},{tbox,tbox+x:size(2)-1},{lbox,lbox+x:size(3)-1}}]:copy(x)
+    end
+--]]
+    return y
+ end
    --check if it's resized successfully or not
-   s =  pcall(function() input = resize_image(iPath, eye, true, 0) end) 
+   s =  pcall(function() input = resize_image(iPath, eye, true, 0) end)
    if not s then table.insert(resizeFail,iPath) end
    --Check input size
    print('Check input size')
@@ -161,7 +171,7 @@ for c in paths.files(opt.src) do
    end
 end
 
---Create CSV file to save this table or txt 
+--Create CSV file to save this table or txt
 torch.save('resizeFailTable.t7',resizeFail)
 
 
