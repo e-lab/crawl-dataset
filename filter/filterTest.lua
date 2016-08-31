@@ -6,6 +6,16 @@ require 'utils'
 local opts = require 'opts'
 opt = opts.parse()
 print(opt)
+
+function checkClassExist(class)
+  for i in pairs(classes) do
+    if classes[i] == class then
+      return true
+    end
+  end
+  return false
+end
+
 function getClass (o, c, i, truepath, falsepath, resizeFail)
    local iPath = paths.concat(o,c,i)
    local input
@@ -128,13 +138,15 @@ checkPaths(filteredDatasetPath)
 
 --Iterates through all subdirectories of dataset folder
 for c in paths.files(opt.src) do
-   if c ~= '..' and c ~= '.' and c~= 'filteredDataSet' then
+   check = checkClassExist(c)
+   if c ~= '..' and c ~= '.' and c~= 'filteredDataSet' and check then
       --create folders for correct and incorrect class predictions, ex: sofaTRUE and sofaFALSE
       truepath = paths.concat(opt.src, 'filteredDataSet', c .. "TRUE")
       falsepath = paths.concat(opt.src, 'filteredDataSet', c .. "FALSE")
       --Check path exist if not creath dir
       flag = checkPaths(truepath)
       flag = checkPaths(falsepath)
+
       -- Check if work has been done with flag is true do work
       if flag then
          p = paths.concat(opt.src, c)
