@@ -3,20 +3,33 @@ from os import path
 import os
 import sys
 from subprocess import call
+from walkdir import filtered_walk, dir_paths, all_paths, file_paths
 
-PATH_FROM = sys.argv[1]
-PATH_TO = path.join(os.curdir,'edataSet2Origin2')
-if not path.isdir( PATH_TO ):
-    os.makedirs(PATH_TO)
-else:
-    print('Dir exists')
+PATH_FROM = path.join(os.curdir, 'test')
+PATH_TO = path.join(os.curdir,'testTarget')
+#Get paths in 1 and 2 depth
+dirsDepth1 = dir_paths(filtered_walk(PATH_FROM, depth=1, min_depth=1))
+dirsDepth2 = dir_paths(filtered_walk(PATH_FROM, depth=2, min_depth=2))
 
-for dirpaths, dirnames, files in walk(PATH_FROM):
-    if dirnames:
-        #print(dirnames)
-        dirpaths = path.join(os.curdir,dirpaths)
-        for dirpaths2, dirnames2, _ in walk(dirpaths):
-            if not dirnames2:
-                print("Processing dir"+dirpaths2)
-                call(['cp','-r',dirpaths2,PATH_TO])
-print("Target Path: "+PATH_TO)
+#Create folders
+def createDir(PATH_TO):
+    if path.isdir(PATH_TO):
+        print('Dir exist')
+    else:
+        call(['mkdir', '-p',PATH_TO])
+def copyFile(SRC,DST):
+    call(['cp', SRC, DST])
+#Copy target depth 1 dir
+for x in dirsDepth1:
+    createDir(x.replace(PATH_FROM, PATH_TO))
+
+
+for depth2 in dirsDepth2:
+    files = file_paths(filtered_walk(depth2,depth=2,included_files=['*.jpg','*.png','*.jpeg']))
+    dirList   = depth2.split('/')
+    last  = dirList.pop()
+    for f in files:
+        #Remove dept2 filename and replace source folder to target folder
+        dst = f.replace(depth2,'/'.join(dirList)).replace(PATH_FROM,PATH_TO)
+        copyFile(f, dst)
+
