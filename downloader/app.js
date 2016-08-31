@@ -62,7 +62,8 @@ bing.list({
 		if(i <= res.length){
 			console.log('Image number: ', i, '/', res.length)
 			var url = res[i-1]['url']
-			var path = rootD + userinput + "/" + userinput + i + ".png"
+            //I think we need to do something in path 'userinput'
+			var path = rootD + userinput + "/" + userinput + i + ".jpeg"
 
 			var fs = require('fs'),
 			    request = require('request');
