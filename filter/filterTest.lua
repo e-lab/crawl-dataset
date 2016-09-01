@@ -1,4 +1,5 @@
 require 'nn'
+require 'cunn'
 require 'cudnn'
 require 'paths'
 require 'image'
@@ -84,10 +85,14 @@ function getClass (o, c, i, truepath, falsepath, resizeFail)
 
    --Do prediction
    model:evaluate()
+   model:cuda()
    output = model:forward(input:cuda())
    probs, indexes = output:topk(1, true, true)
 
-   --sofa  == 17
+   --Brian can you add below option? 
+   --Get probability of c(folder name of input image)
+   --And do probability > opt. th 
+
    --Check with classes
 
    index = indexes:squeeze()
@@ -100,16 +105,17 @@ function getClass (o, c, i, truepath, falsepath, resizeFail)
    print(prob)
    print('File path: ')
    print(iPath)
+   
 
    --moves images to corresponding folders based on filter response
    if class == c and tonumber(prob) >= opt.th then
       toPath = paths.concat(truepath, i)
       file.copy(iPath, toPath)
-      print('TRUE: file copied from\n' .. iPath .. '\nto\n' .. toPath)
+      -- print('TRUE: file copied from\n' .. iPath .. '\nto\n' .. toPath)
    else
       toPath = paths.concat(falsepath, i)
       file.copy(iPath, toPath)
-      print('FALSE: file copied from\n' .. iPath .. '\nto\n' .. toPath)
+      -- print('FALSE: file copied from\n' .. iPath .. '\nto\n' .. toPath)
    end
 
    -- for i in pairs(classes) do
@@ -167,9 +173,10 @@ for c in paths.files(opt.src) do
                getClass(opt.src, c, i, truepath, falsepath, resizeFail)
             end
          end
+         collectgarbage()
       end
-      collectgarbage()
       print(resizeFail)
+      resizeFail = {}
    end
 end
 
