@@ -31,12 +31,15 @@ function getClass (o, c, i, truepath, falsepath, resizeFail)
 
     -- load and rescale image from iPath
     local x = image.load(iPath)
-    print('Law image size')
-    print(x:size())
+    local dim1 = x:size(1)
+    if dim1 ~= 3 then
+       print('Law image size')
+       print(x:size())
+    end
 --    x = image.scale(x, crop_mode)
 
     -- consider 2-dim image
-    x = ((x:dim() == 2) and x:view(1, x:size(1), x:size(2))) or x
+    x = ((x:dim() == 2) and x:view(1, x:size(1), x:size(2))) or x 
 
     -- consider greyscale image
     x = ((x:size(1) == 1) and x:repeatTensor(3,1,1)) or x
@@ -67,68 +70,74 @@ function getClass (o, c, i, truepath, falsepath, resizeFail)
        y[{{},{tbox,tbox+x:size(2)-1},{lbox,lbox+x:size(3)-1}}]:copy(x)
     end
 --]]
+    if dim1 ~= 3 then
+      --Check input size
+      print('Check input size')
+      print(y:size())
+    end
     return y
  end
    --check if it's resized successfully or not
    s =  pcall(function() input = resize_image(iPath, eye, true, 0) end)
    if not s then table.insert(resizeFail,iPath) end
-   --Check input size
-   print('Check input size')
-   print(input:size())
+   if s then
 
---   input = torch.FloatTensor(img:size(1),eye,eye)
-   for ch=1,3 do -- channels
-      input[ch]:add(-mean[ch])
-      input[ch]:div(std[ch])
+   --   input = torch.FloatTensor(img:size(1),eye,eye)
+      local inputDim = input:size(1)
+      if inputDim > 3 then inputDim = 3 end
+      for ch=1,inputDim do -- channels
+         input[ch]:add(-mean[ch])
+         input[ch]:div(std[ch])
+      end
+      input = input:resize(1,3,eye,eye)
+
+      --Do prediction
+      model:evaluate()
+      model:cuda()
+      output = model:forward(input:cuda())
+      probs, indexes = output:topk(1, true, true)
+
+      --Brian can you add below option? 
+      --Get probability of c(folder name of input image)
+      --And do probability > opt. th 
+
+      --Check with classes
+
+      index = indexes:squeeze()
+      prob = math.exp(probs:squeeze())
+      class = classes[index]
+--[[
+      print('Class: ')
+      print(class)
+      print('Probability: ')
+      print(prob)
+      print('File path: ')
+      print(iPath)
+    --]]  
+
+      --moves images to corresponding folders based on filter response
+      if class == c and tonumber(prob) >= opt.th then
+         toPath = paths.concat(truepath, i)
+         file.copy(iPath, toPath)
+         -- print('TRUE: file copied from\n' .. iPath .. '\nto\n' .. toPath)
+      else
+         toPath = paths.concat(falsepath, i)
+         file.copy(iPath, toPath)
+         -- print('FALSE: file copied from\n' .. iPath .. '\nto\n' .. toPath)
+      end
+
+      -- for i in pairs(classes) do
+      --    if i == indexes:squeeze() then
+      --       print('Classes:')
+      --       print(classes[i])
+      --       probs = probs:squeeze()
+      --       print('Probability: ')
+      --       print(math.exp(probs))
+      --       print('File path: ')
+      --       print(iPath)
+      --    end
+      -- end
    end
-   input = input:resize(1,3,eye,eye)
-
-   --Do prediction
-   model:evaluate()
-   model:cuda()
-   output = model:forward(input:cuda())
-   probs, indexes = output:topk(1, true, true)
-
-   --Brian can you add below option? 
-   --Get probability of c(folder name of input image)
-   --And do probability > opt. th 
-
-   --Check with classes
-
-   index = indexes:squeeze()
-   prob = math.exp(probs:squeeze())
-   class = classes[index]
-
-   print('Class: ')
-   print(class)
-   print('Probability: ')
-   print(prob)
-   print('File path: ')
-   print(iPath)
-   
-
-   --moves images to corresponding folders based on filter response
-   if class == c and tonumber(prob) >= opt.th then
-      toPath = paths.concat(truepath, i)
-      file.copy(iPath, toPath)
-      -- print('TRUE: file copied from\n' .. iPath .. '\nto\n' .. toPath)
-   else
-      toPath = paths.concat(falsepath, i)
-      file.copy(iPath, toPath)
-      -- print('FALSE: file copied from\n' .. iPath .. '\nto\n' .. toPath)
-   end
-
-   -- for i in pairs(classes) do
-   --    if i == indexes:squeeze() then
-   --       print('Classes:')
-   --       print(classes[i])
-   --       probs = probs:squeeze()
-   --       print('Probability: ')
-   --       print(math.exp(probs))
-   --       print('File path: ')
-   --       print(iPath)
-   --    end
-   -- end
 end
 
 cutorch.setDevice(opt.GPU) -- by default, use GPU 1
@@ -171,6 +180,7 @@ for c in paths.files(opt.src) do
          for i in paths.files(p) do
             if i ~= '..' and i ~= '.' then
                getClass(opt.src, c, i, truepath, falsepath, resizeFail)
+               print('ok')
             end
          end
          collectgarbage()
