@@ -15,7 +15,10 @@ def ensure_dir(d):
         if not path.isdir(d):
             os.mkdir(d)
 
-def getImage(query,dstFile):
+def getImage(query,root):
+    path = root + '/' + query
+    ensure_dir(path)
+
     key = query + '.n.01'
 
     word = wn.synset(key)
@@ -63,18 +66,13 @@ def getImage(query,dstFile):
                             index +=1
 
     print(keywords)
-    rootFile = '_'+dstFile
-    ensure_dir(rootFile)
     for word in keywords:
         try:
             if not query in word:
                 word = word + ' ' + query
-            call(["node", "app.js", word, "images"])
+            call(["node", "app.js", word, path])
         except:
             print('Failed')
-    # Change folder name
-    call(["mv", rootFile, str(query)])
-    call(["mv", query, dstFile])
 
 def readCSV(fileName):
     with open(fileName,'rU') as csvfile:
@@ -85,12 +83,10 @@ def readCSV(fileName):
     return names
 
 csvFile = sys.argv[1]
-saveFile = csvFile.replace('.csv','')
-ensure_dir(saveFile)
 ensure_dir("images")
 names = readCSV(csvFile)
 for name in names:
     try:
-        getImage(name,saveFile)
+        getImage(name,"images")
     except:
         print(str(name)+' Failed ')
