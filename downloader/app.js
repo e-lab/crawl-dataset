@@ -59,6 +59,9 @@ bing.list({
 
 	var downloader = function(i){
 
+		var success = false
+		var cont = true
+
 		if(i <= res.length){
 			console.log('Image number: ', i, '/', res.length)
 			var url = res[i-1]['url']
@@ -70,11 +73,22 @@ bing.list({
 
 			console.log('Grabbing image info...')
 
+			//sets timeout for retrieving header info
+			setTimeout(function() {
+				if (success == false) {
+					console.log('Timeout while retrieving header info...\n')
+					cont = false
+					downloader(i+1)
+				}	
+			}, 2000)
+
 			request.head(url, function(err, res, body){
 				if (err) {
 					//throw err
 					downloader(i+1)
-				} else {
+				} else if (cont == true) {
+					success = true
+					console.log('image #', i)
 					console.log('content-type:', res.headers['content-type'])
 					console.log('content-length:', res.headers['content-length'])
 
