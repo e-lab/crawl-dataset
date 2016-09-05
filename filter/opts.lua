@@ -18,6 +18,7 @@ function opts.parse()
     --manualSeed      (default 1)
     --GPU             (default 1)
     --th              (default 0.3)      Threshold
+    --v               (default 1)       Version
    ]]
    return opt
 end

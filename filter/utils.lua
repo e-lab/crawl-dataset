@@ -10,6 +10,6 @@ function checkPaths(path, flag)
       print(path .. ' already exist')
       flag = false
    end
-   print('Flag : ' .. tostring(flag))
+   --print('Flag : ' .. tostring(flag))
    return flag
 end
