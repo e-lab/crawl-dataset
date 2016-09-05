@@ -79,13 +79,13 @@ bing.list({
 					console.log('Timeout while retrieving header info...\n')
 					cont = false
 					downloader(i+1)
+					return
 				}	
 			}, 2000)
 
 			request.head(url, function(err, res, body){
 				if (err) {
 					//throw err
-					downloader(i+1)
 				} else if (cont == true) {
 					success = true
 					console.log('image #', i)
