@@ -66,6 +66,10 @@ def getImage(query,root):
                             index +=1
 
     print(keywords)
+
+    if not keywords:
+    	keywords.append(query)
+
     for word in keywords:
         try:
             if not query in word:
