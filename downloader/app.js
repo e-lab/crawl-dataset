@@ -40,7 +40,7 @@ bing.list({
     detail: true
 })
 .then(function (res) {
-	console.log('Results from google', res);
+	console.log('Results from bing', res);
 
 	var dic_array = res
 
@@ -80,7 +80,7 @@ bing.list({
 					cont = false
 					downloader(i+1)
 					return
-				}	
+				}
 			}, 2000)
 
 			request.head(url, function(err, res, body){
