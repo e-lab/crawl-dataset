@@ -139,8 +139,8 @@ resizeFail = {}
 classIndex = nil 
 
 -- Main loop
-filteredTrueDatasetPath = paths.concat(opt.src, 'filteredTrueDataSet'..opt.v)
-filteredFalseDatasetPath = paths.concat(opt.src, 'filteredFalseDataSet'..opt.v)
+filteredTrueDatasetPath = paths.concat(opt.dst, 'filteredTrueDataSet'..opt.v)
+filteredFalseDatasetPath = paths.concat(opt.dst, 'filteredFalseDataSet'..opt.v)
 checkPaths(filteredTrueDatasetPath)
 checkPaths(filteredFalseDatasetPath)
 function checkClassesInModel(classes,c,flag)
