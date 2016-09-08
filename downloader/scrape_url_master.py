@@ -15,6 +15,10 @@ def ensure_dir(d):
 		if not path.isdir(d):
 			os.mkdir(d)
 
+def getJSON(query,root):
+	path = root + '/' + query + '.txt'
+	call(["node", "scrape_url.js", query, path])
+
 def getImage(query,root):
 	keywords = []
 
@@ -93,11 +97,11 @@ def readCSV(fileName):
 	return names
 
 csvFile = sys.argv[1]
-ensure_dir("images")
+ensure_dir("json_files")
 names = readCSV(csvFile)
 for name in names:
 	print(name)
 	try:
-		 getImage(name,"images")
+		 getJSON(name,"json_files")
 	except:
 		 print(str(name)+' Failed ')
