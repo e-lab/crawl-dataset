@@ -1,5 +1,0 @@
-{"url":"http://stuffpoint.com/dogs/image/163072-dogs-dog-playing-football.jpg","path":"./images/dog/dog1.jpeg"}
-{"url":"http://2.bp.blogspot.com/-HA1NGylMSRw/T_pezKKtMuI/AAAAAAAAESM/97G7ehzUYgU/s1600/Beautiful+dog+hd+Wallpapers_2.jpg","path":"./images/dog/dog2.jpeg"}
-{"url":"https://dogsbreedsinformation.files.wordpress.com/2014/02/alaskan-malamute.jpg","path":"./images/dog/dog3.jpeg"}
-{"url":"http://wallpup.com/wp-content/uploads/2013/03/Sweet-Puppy-Dog-Wallpaper.jpg","path":"./images/dog/dog4.jpeg"}
-{"url":"http://upload.wikimedia.org/wikipedia/commons/3/33/Good_dog.jpg","path":"./images/dog/dog5.jpeg"}
