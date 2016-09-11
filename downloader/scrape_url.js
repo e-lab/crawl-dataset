@@ -24,7 +24,8 @@ bing.list({
     detail: true
 })
 .then(function (res) {
-	console.log('Results from google', res);
+	//console.log('Results from google', res);
+	console.log('Number of results: ', res.length)
 
 	var fs = require('fs');
 	fs.writeFile(saveFile, JSON.stringify(res), function(err) {
