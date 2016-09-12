@@ -7,7 +7,7 @@ var EventEmitter = require('events')
 var gm = require('gm')
 
 const jsonFile = process.argv[2]
-const saveFile = process.argv[3]
+const imageclass = process.argv[3]
 
 var res = null
 
@@ -22,10 +22,9 @@ fs.readFile(jsonFile, 'utf8', function(err, data) {
 
 	var json_string = ""
 
-	var userinput = jsonFile.replace('.txt', '')
-	userinput = userinput.replace('json_files/', '')
+	var userinput = imageclass.replace('.txt', '')
 
-	var rootD = "./"+saveFile+"/"
+	var rootD = "./images/"
 	var dir = rootD + userinput + "/"
 	var json_dir = dir+"json_"+userinput + "/"
 
