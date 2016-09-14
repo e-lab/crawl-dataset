@@ -24,7 +24,7 @@ def filterCorruptPng(rootdir):
                     try:
                         v_image = Image.open(filePath)
                         si = os.path.getsize(filePath)
-                        if si == 2051 or si < 15000:
+                        if si == 2051 or si < 3000:
                             filePath = os.getcwd()+'/'+filePath
                             print (filePath+' delete')
                             run(['rm', '-rf', str(filePath)])
