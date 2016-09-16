@@ -24,10 +24,11 @@ for folder in folders:
     if 'val' in folder:
         valTotal = valTotal+ num
     total = num + total
-
+epoch = trainTotal / 128
 with open(str(rootdir)+"dataset.tsv", "w") as record_file:
     for i in range(1,len(folders)):
         record_file.write(folders[i].replace('./','')+'\t'+str(img_nums[i]).replace(' ','')+'\n')
     record_file.write('total :'+str(total)+'\n')
     record_file.write('train :'+str(trainTotal)+'\n')
     record_file.write('val   :'+str(valTotal)+'\n')
+    record_file.write('EPOCH per 128 batch:'+str(epoch)+'\n')
