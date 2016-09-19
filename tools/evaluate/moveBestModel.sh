@@ -15,3 +15,5 @@ echo "Moving categoris.t7"
 cp categories.txt $1;
 echo "Moving optimState_.t7"
 cp optimState_*.t7 $1;
+echo "Moving stat.t7"
+cp stat.t7 $1;
