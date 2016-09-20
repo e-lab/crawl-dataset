@@ -10,7 +10,7 @@ for subdir, dirs, files in os.walk(rootdir):
 folders = sorted(folders)
 
 img_nums = []
-ext = ['jpeg','png','JPEG']
+ext = ['jpeg','png','JPEG','jpg']
 total = 0
 trainTotal = 0
 valTotal = 0
