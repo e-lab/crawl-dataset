@@ -1,5 +1,6 @@
 require 'nn'
 require 'cunn'
+require 'cutorch'
 require 'cudnn'
 require 'paths'
 require 'image'
@@ -34,7 +35,7 @@ function getClass (o, c, i, truepath, falsepath, resizeFail, ver, classIndex)
       end
       --]]
       -- consider 2-dim image
-      x = ((x:dim() == 2) and x:view(1, x:size(1), x:size(2))) or x 
+      x = ((x:dim() == 2) and x:view(1, x:size(1), x:size(2))) or x
 
       -- consider greyscale image
       x = ((x:size(1) == 1) and x:repeatTensor(3,1,1)) or x
@@ -79,8 +80,8 @@ function getClass (o, c, i, truepath, falsepath, resizeFail, ver, classIndex)
       --Check with classes
       local prob, toPath = 0, nil
       if ver == 1 then
-         print(c)
          prob = math.exp(output[1][classIndex])
+         print(c)
          print(prob)
          --moves images to corresponding folders based on filter response
          if tonumber(prob) >= opt.th then
@@ -96,6 +97,8 @@ function getClass (o, c, i, truepath, falsepath, resizeFail, ver, classIndex)
          probs, indexes = output:topk(1, true, true)
          local index = indexes:squeeze()
          prob = math.exp(probs:squeeze())
+         print(c)
+         print(prob)
          class = classes[index]
       --[[
          print('Class: ')
@@ -104,7 +107,7 @@ function getClass (o, c, i, truepath, falsepath, resizeFail, ver, classIndex)
          print(prob)
          print('File path: ')
          print(iPath)
-       --]]  
+       --]]
 
          --moves images to corresponding folders based on filter response
          if class == c and tonumber(prob) >= opt.th then
@@ -136,7 +139,7 @@ std     = stat.std
 mean    = stat.mean
 flag = false
 resizeFail = {}
-classIndex = nil 
+classIndex = nil
 
 -- Main loop
 filteredTrueDatasetPath = paths.concat(opt.dst, 'filteredTrueDataSet'..opt.v)
@@ -146,10 +149,10 @@ checkPaths(filteredFalseDatasetPath)
 function checkClassesInModel(classes,c,flag)
    for j in pairs(classes) do
       print(j)
-      if classes[j] == c then 
+      if classes[j] == c then
          print('Target class: '..c)
-         print(classes[j]..' is in the model class set') 
-         flag = true 
+         print(classes[j]..' is in the model class set')
+         flag = true
          classIndex = j
          break
       else
@@ -161,6 +164,7 @@ end
 --Iterates through all subdirectories of dataset folder
 for c in paths.files(opt.src) do
    check = checkClassExist(c)
+   print(c)
    if c ~= '..' and c ~= '.' and c~= 'filteredFalseDataSet' and c ~= 'filteredTrueDataSet' and check then
       --create folders for correct and incorrect class predictions, ex: sofaTRUE and sofaFALSE
       truepath = paths.concat(filteredTrueDatasetPath, c )
