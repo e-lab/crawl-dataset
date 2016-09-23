@@ -8,11 +8,15 @@ var gm = require('gm')
 
 const jsonFile = process.argv[2]
 const imageclass = process.argv[3]
+const classfolder = process.argv[4]
 
 var res = null
 
 var fs = require('fs')
 fs.readFile(jsonFile, 'utf8', function(err, data) {
+	console.log("jsonFile: "+jsonFile)
+	console.log("imageclass: "+imageclass)
+	console.log("classfolder: "+classfolder)
 	if (err) throw err;
 	console.log('OK: ' + jsonFile);
 	//console.log(data)
@@ -25,11 +29,20 @@ fs.readFile(jsonFile, 'utf8', function(err, data) {
 	var userinput = imageclass.replace('.txt', '')
 
 	var rootD = "./images/"
-	var dir = rootD + userinput + "/"
+	//var dir = rootD + userinput + "/"
+	var dir = classfolder + "/" + userinput + "/"
 	var json_dir = dir+"json_"+userinput + "/"
 
-	fs.mkdirSync(dir);
-	fs.mkdirSync(json_dir)
+	if (!fs.existsSync(classfolder)){
+	    fs.mkdirSync(classfolder);
+	}
+	if (!fs.existsSync(dir)){
+	    fs.mkdirSync(dir);
+	}
+	if (!fs.existsSync(json_dir)){
+	    fs.mkdirSync(json_dir);
+	}
+
 
 	var json_path = json_dir + userinput + "_json.txt"
 
@@ -42,7 +55,7 @@ fs.readFile(jsonFile, 'utf8', function(err, data) {
 			console.log('Image number: ', i, '/', res.length)
 			var url = res[i-1]['url']
 	        //I think we need to do something in path 'userinput'
-			var path = rootD + userinput + "/" + userinput + i + ".jpeg"
+			var path = classfolder + "/" + userinput + "/" + userinput + i + ".jpeg"
 
 			var fs = require('fs'),
 			    request = require('request');

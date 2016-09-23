@@ -19,74 +19,136 @@ def getJSON(query,root):
 	path = root + '/' + query + '.txt'
 	call(["node", "scrape_url.js", query, path])
 
-def getImage(query,root):
+def getWordnetJSON(query,root):
+	classpath = root + '/' + query + '/'
+	ensure_dir(classpath)
+
 	keywords = []
-
-	if "/" in query:
-		a = query.split("/")
-		query = a[0]
-		for w in a:
-			keywords.append(w.strip())
-
-	path = root + '/' + query
-	ensure_dir(path)
-
 	key = query + '.n.01'
 
-	word = wn.synset(key)
-	hyp = lambda s:s.hyponyms()
-	tree = word.tree(hyp)
+	try:
+		word = wn.synset(key)
+		hyp = lambda s:s.hyponyms()
+		tree = word.tree(hyp)
 
-	strTmp = str(tree)
-	strTmp = strTmp.replace("Synset", "")
-	strTmp = strTmp.replace("(", "")
-	strTmp = strTmp.replace(")", "")
-	strTmp = strTmp.replace("'", "")
-	strTmp = strTmp.replace(",", "")
-	strTmp = strTmp.replace(" ", "")
-	list_char = list(strTmp)
+		strTmp = str(tree)
+		strTmp = strTmp.replace("Synset", "")
+		strTmp = strTmp.replace("(", "")
+		strTmp = strTmp.replace(")", "")
+		strTmp = strTmp.replace("'", "")
+		strTmp = strTmp.replace(",", "")
+		strTmp = strTmp.replace(" ", "")
+		list_char = list(strTmp)
 
-	result = ""
-	level = 0
+		result = ""
+		level = 0
 
-	index = 0
+		index = 0
 
-	#parse tree with a stack to get only 1st and 2nd levels
-	while index < len(list_char):
-			if list_char[index] == '[':
-					level += 1
-					index += 1
-			elif list_char[index] == ']':
-					level -= 1
-					index +=1
-			else:
-					if level <= 2:
-							while list_char[index] != '.':
-									result += list_char[index]
-									index += 1
+		#parse tree with a stack to get only 1st and 2nd levels
+		while index < len(list_char):
+				if list_char[index] == '[':
+						level += 1
+						index += 1
+				elif list_char[index] == ']':
+						level -= 1
+						index +=1
+				else:
+						if level <= 2:
+								while list_char[index] != '.':
+										result += list_char[index]
+										index += 1
 
-							while list_char[index] != '[' and list_char[index] != ']':
-									index += 1
+								while list_char[index] != '[' and list_char[index] != ']':
+										index += 1
 
-							result = result.replace("_", " ")
-							keywords.append(result)
-							result = ""
+								result = result.replace("_", " ")
+								if query not in result:
+									result = result + " " + query
 
-					else:
-							index +=1
+								keywords.append(result)
+								result = ""
+
+						else:
+								index +=1
+	except:
+		keywords.append(query)
 
 	print(keywords)
 
-	if not keywords:
-		keywords.append(query)
+	for w in keywords:
+		print("Getting JSON for: " + w)
+		call(["node", "scrape_url.js", w, classpath + w + ".txt"])
 
-	for word in keywords:
-		try:
-			if not query in word:
-				word = word + ' ' + query
-			call(["node", "app.js", word, path])
-		except:
-			print('Failed')
+# def getImage(query,root):
+# 	keywords = []
+
+# 	if "/" in query:
+# 		a = query.split("/")
+# 		query = a[0]
+# 		for w in a:
+# 			keywords.append(w.strip())
+
+# 	path = root + '/' + query
+# 	ensure_dir(path)
+
+# 	key = query + '.n.01'
+
+# 	word = wn.synset(key)
+# 	hyp = lambda s:s.hyponyms()
+# 	tree = word.tree(hyp)
+
+# 	strTmp = str(tree)
+# 	strTmp = strTmp.replace("Synset", "")
+# 	strTmp = strTmp.replace("(", "")
+# 	strTmp = strTmp.replace(")", "")
+# 	strTmp = strTmp.replace("'", "")
+# 	strTmp = strTmp.replace(",", "")
+# 	strTmp = strTmp.replace(" ", "")
+# 	list_char = list(strTmp)
+
+# 	result = ""
+# 	level = 0
+
+# 	index = 0
+
+# 	#parse tree with a stack to get only 1st and 2nd levels
+# 	while index < len(list_char):
+# 			if list_char[index] == '[':
+# 					level += 1
+# 					index += 1
+# 			elif list_char[index] == ']':
+# 					level -= 1
+# 					index +=1
+# 			else:
+# 					if level <= 2:
+# 							while list_char[index] != '.':
+# 									result += list_char[index]
+# 									index += 1
+
+# 							while list_char[index] != '[' and list_char[index] != ']':
+# 									index += 1
+
+# 							result = result.replace("_", " ")
+
+# 							keywords.append(result)
+# 							result = ""
+
+# 					else:
+# 							index +=1
+
+# 	print(keywords)
+
+# 	if not keywords:
+# 		keywords.append(query)
+
+# 	for word in keywords:
+# 		try:
+# 			if not query in word:
+# 				word = word + ' ' + query
+# 			call(["node", "app.js", word, path])
+# 		except:
+# 			print('Failed')
 
 def readCSV(fileName):
 	with open(fileName,'rU') as csvfile:
@@ -102,6 +164,6 @@ names = readCSV(csvFile)
 for name in names:
 	print(name)
 	try:
-		 getJSON(name,"json_files")
+		getWordnetJSON(name,"json_files")
 	except:
-		 print(str(name)+' Failed ')
+		print(str(name)+' Failed ')
