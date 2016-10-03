@@ -17,10 +17,10 @@ for d in listdir(path):
             print("query:" + query)
             if query[0] != ".":
                 srcTxtPath = join(path, d ,query)
-                destclasspath = join(destclasspath ,query.strip('.txt'))
+                subClassPath = join(destclasspath ,query.strip('.txt'))
                 #Dest class path most top
-                print(destclasspath)
+                print(subClassPath)
                 print(srcTxtPath)
                 print('--------------')
-                call(["python", "getImgs.py", srcTxtPath,destclasspath])
+                call(["python3", "getImgs.py", srcTxtPath,subClassPath])
 
