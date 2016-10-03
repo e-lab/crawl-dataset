@@ -43,11 +43,13 @@ def downLoadImg(destPath,infoList):
             idx += 1
             p = mul.Process(target = rq.urlretrieve, name='download',args=(url,savePath))
             p.start()
-            p.join(10)
+            p.join(20)
             if p.is_alive():
                 print('Too longdownloading terminate')
                 p.terminate()
                 p.join()
+                call(['rm','-rf',savePath])
+                idx -= 1
             if p.exitcode == 1:
                 print('fail')
                 idx -= 1
