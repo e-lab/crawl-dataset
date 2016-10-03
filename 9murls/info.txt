@@ -1,0 +1,8 @@
+hand (human hand)
+cellphone (tablet)
+computer (PC, laptop)
+cup (mug, drinking glass)
+kitchen-utensils (fork, knife, spoon)
+pen (pencil)
+
+
