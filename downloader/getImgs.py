@@ -4,6 +4,8 @@ from os.path import isdir
 from pathlib import Path
 from subprocess import call
 import sys
+import multiprocessing as mul
+import time
 
 def checkFile(path):
     if not isdir(path):
@@ -36,12 +38,19 @@ def downLoadImg(destPath,infoList):
         savePath = join(destPath,className+ str(idx) + '.' + ext)
         check = Path(savePath)
         if not check.is_file():
-            try:
-                print('Downloading : {} th {}' .format(idx,className))
-                rq.urlretrieve(url,savePath)
-                idx += 1
-            except:
+            print('Downloading : {} th {}' .format(idx,className))
+            start = time.clock()
+            idx += 1
+            p = mul.Process(target = rq.urlretrieve, name='download',args=(url,savePath))
+            p.start()
+            p.join(10)
+            if p.is_alive():
+                print('Too longdownloading terminate')
+                p.terminate()
+                p.join()
+            if p.exitcode == 1:
                 print('fail')
+                idx -= 1
         else:
             print('Already Downloaded')
             idx += 1
