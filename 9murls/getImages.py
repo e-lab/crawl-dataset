@@ -131,7 +131,7 @@ def downLoadImg(rootPath,infoList,codeTable):
             check = Path(savePath)
             #Check if we downloaded before
             if not check.is_file():
-                print('Downloading : {} at {}' .format(info['ImageID'],info['Subset']))
+                print('Downloading : {} at {} class {}' .format(info['ImageID'],info['Subset'],code[0]))
                 print(url)
                 p = mul.Process(target = rq.urlretrieve, name='download',args=(url,savePath))
                 p.start()

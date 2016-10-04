@@ -21,3 +21,4 @@ Shell script to run code after downloading files it will generate testTrain as r
 sh run.sh
 ```
 note: labels.csv and images.csv must sync i.e. train/labels.csv train/images.csv
+note: class: scissors is not in validation dataset it's only at trainSet
