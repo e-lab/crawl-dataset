@@ -17,7 +17,8 @@ for d in listdir(path):
             print("query:" + query)
             if query[0] != ".":
                 srcTxtPath = join(path, d ,query)
-                subClassPath = join(destclasspath ,query.strip('.txt'))
+                query = query.split('.')
+                subClassPath = join(destclasspath ,query[0])
                 #Dest class path most top
                 print(subClassPath)
                 print(srcTxtPath)
