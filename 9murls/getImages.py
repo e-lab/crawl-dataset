@@ -22,7 +22,7 @@ def readJson(filename):
 #Loading csv
 def load_csv(csv_filepath):
     csv_filepath = join(os.curdir,csv_filepath)
-    print(csv_filepath)
+    print('loading csv from {}'.format(csv_filepath))
     with open(csv_filepath) as csvfile:
         reader = csv.reader(csvfile)
         lists = list(reader)
@@ -30,7 +30,7 @@ def load_csv(csv_filepath):
 #Loading dic format csv for images.csv
 def load_dic_csv(csv_filepath):
     csv_filepath = join(os.curdir,csv_filepath)
-    print(csv_filepath)
+    print('loading dic from {} '.format(csv_filepath))
     with open(csv_filepath) as csvfile:
         reader = csv.DictReader(csvfile)
         lists = []
@@ -46,6 +46,7 @@ def load_label_csv(csv_filepath):
     csv_filepath = join(os.curdir,csv_filepath)
     tmp = load_csv(csv_filepath)
     lists = []
+    print('Laoding label from csv')
     for i in range(1,len(tmp)):
         tmp2 = tmp[i]
         for i in range(1,len(tmp2)):
@@ -54,14 +55,15 @@ def load_label_csv(csv_filepath):
     return lists
 
 #code extract function
-def getCode(classes41,dict):
+def getCode(classes41,dicts):
+    print('Combin class with dict.csv')
     match = {}
     #Iter target classes
     for name in classes41:
         name = name[0]
         tmp = []
         #Iter 9murl classes
-        for info in dict:
+        for info in dicts:
             #Perform exact match
             if name == info[1]:
                 tmp.append(info[0])
@@ -108,9 +110,9 @@ def downLoadImg(rootPath,infoList,codeTable):
     for info in infoList:
         dic[info['ImageID']] = info
     #Check classes with own code
-    print(codeTable)
     #Iterate code table
     for code in codeTable:
+        print('Downloading class : {}'.format(code[0]))
         folderPath = join(rootPath,code[0])
         #Check folder if not create
         checkFile(folderPath)
@@ -156,6 +158,7 @@ def downLoadImg(rootPath,infoList,codeTable):
 # num : number of image match: dic of image class
 #labels from labes.csv
 def getCodeFromLabel(num,match,labels):
+    print('Get code from labels')
     t = []
     for key, value in match.items():
         tmp = []
@@ -168,36 +171,31 @@ def getCodeFromLabel(num,match,labels):
     return t
 
 # dict is class name and own id mapper from google
-#fileName = 'dict.csv'
 fileName = sys.argv[1]
 # We want this classes csv
-#fileName2 = '41classes.csv'
 fileName2 = sys.argv[2]
 #Load dictionary
-dict     = load_csv(fileName)
+dicts     = load_csv(fileName)
 #Get our class
 classes41 = load_csv(fileName2)
 # MApping our to google dictionary
-match = getCode(classes41,dict)
+match = getCode(classes41,dicts)
 #Print for test
+print('Show classes and target code')
 print(match)
 #Decide where we want train? validation
 #images.csv have url, authorm licence, etc
-#sourcePath = './source/images_2016_08/train/images.csv'
 sourcePath = sys.argv[3]
 #ImageID, Subset, OriginalURL, Title
-source2 = load_dic_csv(sourcePath)
+source = load_dic_csv(sourcePath)
 #labels.csv has 64bit img ids and map to target class
-#labelPath = './source/machine_ann_2016_08/train/labels.csv'
 labelPath = sys.argv[4]
 labels = load_label_csv(labelPath)
 #Set our number per class
-#num = 5
-num = sys.argv[5]
+num = int(sys.argv[5])
 #Get img 64bit info mapping
 codeTable = getCodeFromLabel(num,match,labels)
 #Set up our target folder
-#rootPath = 'testDown'
 rootPath = sys.argv[6]
 #Call downloader to download images
-downLoadImg(rootPath,testS,codeTable)
+downLoadImg(rootPath,source,codeTable)
