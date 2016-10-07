@@ -1,12 +1,13 @@
 require python3.5
 
-pip3 install numpy
+run sh install.sh to install dependency
 
-pip3 install urllib
+Have to upgrade pip3 when fail init pip3
 
-pip3 install pillow
+```
+sudo -H python3 -m pip install --upgrade pip
+```
 
-pip3 install scipy
 
 ```
 sh download.sh
