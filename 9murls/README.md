@@ -8,7 +8,7 @@ Have to upgrade pip3 when fail init pip3
 sudo -H python3 -m pip install --upgrade pip
 ```
 
-
+Downloading url and lebel files
 ```
 sh download.sh
 ```
