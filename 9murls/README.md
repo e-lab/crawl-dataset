@@ -2,7 +2,7 @@
 #Need python >= 3.5
 
 #To install dependency
-#Also see requirement.txt
+#See requirement.txt for python pacakges
 
 ```
 sh install.sh
@@ -22,11 +22,17 @@ sh download.sh
 # To download images from given csv file
 
 Do python3 getImages.py with follow argument options
+
 1st argument : dict.csv
+
 2end argument: Your classes.csv
+
 3rd argument : path to images.csv i.e. images_2016_08/validation/images.csv
+
 4th argument : path to labels.csv i.e. machine_ann_2016_08/validation/labels.csv
+
 5th argument : Number of Max images per class
+
 6th argument : Target folder to download
 
 i.e.
