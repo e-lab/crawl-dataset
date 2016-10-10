@@ -21,24 +21,21 @@ sh download.sh
 
 # To download images from given csv file
 
-Do python3 getImages.py with follow argument options
+Do python3 getImages.py with follow option options
 
-1st argument : dict.csv
+1st option : dict.csv
 
-2end argument: Your classes.csv
+2end option: Your classes.csv
 
-3rd argument : path to images.csv i.e. images_2016_08/validation/images.csv
+3rd option : path to images.csv i.e. images_2016_08/validation/images.csv
 
-4th argument : path to labels.csv i.e. machine_ann_2016_08/validation/labels.csv
+4th option : path to labels.csv i.e. machine_ann_2016_08/validation/labels.csv
 
-5th argument : Number of Max images per class
+5th option : Number of Max images per class
 
-6th argument : Target folder to download
+6th option   : Number of Threads
 
-i.e.
-```
-python3 getImages.py dict.csv 41classes.csv path_To_images.csv path_To_labels.csv numbe_of_img_per_class targetFolder
-```
+6th option : Target folder to download
 
 #To test
 

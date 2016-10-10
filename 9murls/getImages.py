@@ -1,7 +1,12 @@
+#2016 Oct by Sangpil Kim
+__author__ = 'Sangpil Kim'
+
 import os
 import csv
-import sys
 import json
+import click
+from tqdm import tqdm
+from concurrent import futures
 from scipy.misc import imresize, imread, imsave
 from urllib import request as rq
 from os.path import join
@@ -83,17 +88,17 @@ def checkFile(path):
     else:
         print('{} exist'.format(path))
 #reSize img
-def resizeImg(imgPath):
+def resizeImg(imgPath,img_size):
     img = imread(imgPath)
     h, w, _ = img.shape
     scale = 1
     if w >= h:
-        new_w = 256
+        new_w = img_size
         if w  >= new_w:
             scale = float(new_w) / w
         new_h = int(h * scale)
     else:
-        new_h = 256
+        new_h = img_size
         if h >= new_h:
             scale = float(new_h) / h
         new_w = int(w * scale)
@@ -102,16 +107,14 @@ def resizeImg(imgPath):
 
 #Download img
 #Later we can do multi thread apply workers to do faster work
-def downLoadImg(rootPath,infoList,codeTable):
+def downLoadImg(rootPath,img_size,thred_number,infoList,codeTable):
     rootPath = join(rootPath,infoList[0]['Subset'])
     #MAKE code as key change infoList
     dic = {}
     #Convert infoList to hashable dic with 64bit img code ID
     for info in infoList:
         dic[info['ImageID']] = info
-    #Check classes with own code
-    #Iterate code table
-    for code in codeTable:
+    def process(code):
         print('Downloading class : {}'.format(code[0]))
         folderPath = join(rootPath,code[0])
         #Check folder if not create
@@ -149,12 +152,20 @@ def downLoadImg(rootPath,infoList,codeTable):
                 else:
                     #Lets resize with 256 size
                     try:
-                        resizeImg(savePath)
+                        resizeImg(savePath,img_size)
                         print('resized')
                     except Exception as e:
                         print(e)
             else:
                 print('Already Downloaded')
+
+    #Check classes with own code
+    #Iterate code table
+    with futures.ThreadPoolExecutor(max_workers=thred_number) as worker:
+        mapper = [worker.submit(process,code) for code in codeTable]
+        for tmp in tqdm(futures.as_completed(mapper), total=len(mapper)):
+            pass
+    #for code in codeTable:
 # num : number of image match: dic of image class
 #labels from labes.csv
 def getCodeFromLabel(num,match,labels):
@@ -169,33 +180,41 @@ def getCodeFromLabel(num,match,labels):
                     break
         t.append([key,tmp])
     return t
+@click.command()
+@click.option('--dict',default='dict.csv')
+@click.option('--target',default='41classes.csv')
+@click.option('--images_csv',default='source/images_2016_08_v3/validation/images.csv')
+@click.option('--label_csv',default='source/machine_ann_2016_08/validation/labels.csv')
+@click.option('--num',default=2)
+@click.option('--img_size',default=256)
+@click.option('--down_folder',default='testDown')
+@click.option('--thred_number',default=5)
 
-# dict is class name and own id mapper from google
-fileName = sys.argv[1]
-# We want this classes csv
-fileName2 = sys.argv[2]
-#Load dictionary
-dicts     = load_csv(fileName)
-#Get our class
-classes41 = load_csv(fileName2)
-# MApping our to google dictionary
-match = getCode(classes41,dicts)
-#Print for test
-print('Show classes and target code')
-print(match)
-#Decide where we want train? validation
-#images.csv have url, authorm licence, etc
-sourcePath = sys.argv[3]
-#ImageID, Subset, OriginalURL, Title
-source = load_dic_csv(sourcePath)
-#labels.csv has 64bit img ids and map to target class
-labelPath = sys.argv[4]
-labels = load_label_csv(labelPath)
-#Set our number per class
-num = int(sys.argv[5])
-#Get img 64bit info mapping
-codeTable = getCodeFromLabel(num,match,labels)
-#Set up our target folder
-rootPath = sys.argv[6]
-#Call downloader to download images
-downLoadImg(rootPath,source,codeTable)
+def main(dict,target,images_csv,label_csv,num,img_size,down_folder,thred_number):
+    print(dict)
+    # dict is class name and own id mapper from google
+    #Load dictionary
+    dicts     = load_csv(dict)
+    #Get our class
+    # We want this classes csv
+    classes41 = load_csv(target)
+    # MApping our to google dictionary
+    match = getCode(classes41,dicts)
+    #Print for test
+    print('Show classes and target code')
+    print(match)
+    #Decide where we want train? validation
+    #images.csv have url, authorm licence, etc
+    #ImageID, Subset, OriginalURL, Title
+    source = load_dic_csv(images_csv)
+    #labels.csv has 64bit img ids and map to target class
+    labels = load_label_csv(label_csv)
+    #Set our number per class
+    #Get img 64bit info mapping
+    codeTable = getCodeFromLabel(num,match,labels)
+    #Set up our target folder
+    #Call downloader to download images
+    downLoadImg(down_folder,img_size,thred_number,source,codeTable)
+
+if __name__ == '__main__':
+    main()

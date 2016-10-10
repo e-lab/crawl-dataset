@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-export DOWNLOAD_DIR='./download'
-#mkdir ${DOWNLOAD_DIR}
+export DOWNLOAD_DIR='./source'
+mkdir ${DOWNLOAD_DIR}
 cd ${DOWNLOAD_DIR}
 
 

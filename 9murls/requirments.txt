@@ -6,3 +6,4 @@ urllib
 pillow
 scipy
 click
+tqdm
