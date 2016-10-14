@@ -1,8 +1,13 @@
+# Open Image Dataset downloader
 
-#Need python >= 3.5
+Downloads images from the Google Open Image Dataset: https://github.com/openimages/dataset
 
-#To install dependency
-#See requirement.txt for python pacakges
+
+## To install dependency
+
+Needs python >= 3.5
+
+See requirement.txt for python pacakges
 
 ```
 sh install.sh
@@ -14,12 +19,12 @@ Have to upgrade pip3 when fail init pip3 in ubuntu
 sudo -H python3 -m pip install --upgrade pip
 ```
 
-# First Downloading url and lebel files
+## First Downloading url and lebel files
 ```
 sh download.sh
 ```
 
-# To download images from given csv file
+## To download images from given csv file
 
 Do python3 getImages.py with follow option options
 
