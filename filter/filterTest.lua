@@ -85,6 +85,9 @@ function getClass (o, c, i, truepath, falsepath, resizeFail, ver, classIndex)
          print(prob)
          --moves images to corresponding folders based on filter response
          if tonumber(prob) >= opt.th then
+            print('Prob : ',tonumber(prob))
+            print('opt.th :', opt.th)
+            print('prob >= opt.th', tonumber(prob) >= opt.th)
             toPath = paths.concat(truepath, i)
             file.copy(iPath, toPath)
             -- print('TRUE: file copied from\n' .. iPath .. '\nto\n' .. toPath)
