@@ -7,3 +7,5 @@
 downloadFromBing
 
 ##Flickr
+
+imageNetFlickr
