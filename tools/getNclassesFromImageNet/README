@@ -1,5 +1,0 @@
-To run 
-
-```
-th genNclassesJson.lua && python readCleanJson.py
-```
