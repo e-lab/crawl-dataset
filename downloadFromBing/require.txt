@@ -1,0 +1,27 @@
+Python > 3.5
+
+python packages
+concurrent
+tqdm
+urllib
+click
+scipy
+pillow
+nltk
+
+npm packages
+
+npm install async
+npm install bluebird
+npm install cheerio
+npm install EventEmitter
+npm install gm
+npm install iconv
+npm install limiter
+npm install lupus
+npm install nightmare
+npm install request
+
+Ubuntu packages
+imagemagick
+graphicsmagick

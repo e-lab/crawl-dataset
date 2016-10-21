@@ -1,5 +1,8 @@
 import csv
 import sys
+from os.path import join
+from os.path import isdir
+from subprocess import call
 from nltk.corpus import wordnet as wn
 
 def readCSV(fileName):
@@ -16,24 +19,32 @@ def readCSV(fileName):
 
 def writeCSV(array,dstFile):
     with open(dstFile,'w', newline='\n') as csvfile:
-        writer = csv.writer(csvfile,delimiter='\n')
+        writer = csv.writer(csvfile,delimiter='\n', lineterminator='\n')
         writer.writerow(array)
 
-def getId(lists):
+def getId(name):
     ids = []
-    for name in lists:
-        try:
-            ss = wn.synset(str(name)+'.n.01')
-            wordid = ss.pos()+str(ss.offset())
-            print(wordid)
-            ids.append(wordid)
-        except:
-            print(name+' failed')
+    try:
+        ss = wn.synset(str(name)+'.n.01')
+        wordid = ss.pos()+str(ss.offset())
+        print(wordid)
+        ids.append(wordid)
+    except:
+        print(name+' failed')
     return ids
+def checkFile(path):
+    if not isdir(path):
+        call(['mkdir','-p',path])
+    else:
+        print('{} exist'.format(path))
 #argv[1] will get name of files
 lists = readCSV(sys.argv[1])
+dest = 'lists'
+checkFile(dest)
 print(lists)
-#Get ids from lists
-ids = getId(lists)
-#Writing to list csv
-writeCSV(ids, sys.argv[2])
+for name in lists:
+    destfile = join(dest,name+'.csv')
+    #Get ids from lists
+    ids = getId(name)
+    #Writing to list csv
+    writeCSV(ids, destfile)

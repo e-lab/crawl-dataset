@@ -4,9 +4,13 @@
 
 import sys
 import csv
+from os.path import join
 import subprocess as sub
 import requests
 import codecs
+import click
+from walkdir import filtered_walk, dir_paths, all_paths, file_paths
+from getImgs import downLoadImg
 from bs4 import BeautifulSoup as bs4
 
 def getIdfromHtml(html):
@@ -42,26 +46,39 @@ def getFlickerUrls(html):
     for url in urls:
         if not 'flickr' in url:
             urls.pop()
-    return urls
-
-if __name__ == '__main__':
-    className = sys.argv[1].replace('.csv','')
-    conIds = getIds(sys.argv[1])
-#    className = sys.argv[2]
+    infoList = []
+    idx = 0
+    for url in urls:
+        idx += 1
+        dic = {}
+        dic['idx'] = idx
+        dic['url'] = url
+        infoList.append(dic)
+    return infoList
+def down(csvfile,destpath,img_size,thread_number):
+    className = csvfile.replace('.csv','')
+    destpath = join(destpath,className)
+    conIds = getIds(csvfile)
     for conId in conIds:
         print(conId)
         html = getUrlsFromId(conId)
         #html = html.encode('ascii','ignore')
         html = str(html)
-        urls = getFlickerUrls(html)
-        counter = 0
-        for url in urls:
-            try:
-                counter += 1
-                print ('-----------------')
-                filePath = className+'/'+className+'_flickr_'+str(counter)+'.jpeg'
-                print(filePath)
-                dw = sub.call('wget --timeout=5 --tries=2 -A jpeg,jpg,bmp,gif,png '+ url +' -O ./'+filePath ,shell=True)
-            except:
-                print('Fail')
+        infoList = getFlickerUrls(html)
+        downLoadImg(destpath,infoList,img_size,thread_number)
+
+@click.command()
+@click.argument('srcdir') #,help='Dir of json file which has url txt')
+@click.option('-destpath',default='images') #,help='Dest dir')
+@click.option('-img_size',default=256)
+@click.option('-thread_number',default=5)
+def main(srcdir,destpath,img_size,thread_number):
+    #Iterate csv container
+    csvFiles = file_paths(filtered_walk(srcdir, depth=1, included_files='*.csv'))
+    for csvfile in list(csvFiles):
+        #Download files
+        down(csvfile,destpath,img_size,thread_number)
+
+if __name__ == '__main__':
+    main()
 
