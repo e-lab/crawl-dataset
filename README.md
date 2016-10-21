@@ -2,7 +2,7 @@
 
 9murls
 
-##downloader
+##Image scraper with Bing
 
 downloadFromBing
 
