@@ -5,8 +5,6 @@ import os
 import csv
 import json
 import click
-from tqdm import tqdm
-from concurrent import futures
 from scipy.misc import imresize, imread, imsave
 from urllib import request as rq
 from os.path import join
@@ -14,6 +12,8 @@ from os.path import isdir
 from pathlib import Path
 from subprocess import call
 import multiprocessing as mul
+from tqdm import tqdm
+from concurrent import futures
 
 #Write Json
 def writeJson(label,filename):

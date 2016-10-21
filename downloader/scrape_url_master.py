@@ -25,7 +25,7 @@ def getWordnetJSON(query,root):
 
 	keywords = []
 	key = query + '.n.01'
-
+	keywords.append(query)
 	try:
 		word = wn.synset(key)
 		hyp = lambda s:s.hyponyms()

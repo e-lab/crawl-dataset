@@ -1,48 +1,42 @@
-#TO get urls
+#TO get images from csv list files
+
 Create list.csv Column name NAME list what you want under NAME
 
+1. Collect urls
+
+```bash
+python scrape_urls_master.py test.csv
 ```
-python scrape_url_master.py list.csv
+
+test.csv form
+
+```csv
+NAME
+dog
+cat
 ```
-After collecting urls
-Run
-```
+
+2. Download images from urls
+
+```bash
 pthon download_from_json_master.py json_files
 ```
+
 It will download images under images folder
 
 #This repo is for creating a large scale image data set from World Wide Web.
 
-Will need to install node modules
-- async
-- bluebird
-- cheerio
-- EventEmitter
-- gm
-- iconv
-- limiter
-- lupus
-- nightmare
-- request
+Requirements: look for details require.txt
 
-Simple usage
+```bash
+pip3 install nltk
 
-```
-node app.js
 ```
 To use wordnet.py
 
 Need to install nltk and nltk.download('all')
 
-```
-pip3 install nltk
-
-```
-
-Need to install imagemagick graphicsmagick for node gm
-
-
-```
+```bash
 sudo apt-get install imagemagick graphicsmagick
 ```
 
