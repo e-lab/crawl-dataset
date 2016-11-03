@@ -1,5 +1,0 @@
-requests>=2.2.1
-tqdm>=4.8.4
-futures>=3.0.5
-click>=6.6
-
